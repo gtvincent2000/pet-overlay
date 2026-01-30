@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import { Application, Graphics } from "pixi.js";
+import { Application, Assets, Sprite, TextureStyle } from "pixi.js";
+
+TextureStyle.defaultOptions.scaleMode = "nearest"; // global default for crisp pixel scaling :contentReference[oaicite:2]{index=2}
 
 export default function PixiStage() {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -13,11 +15,9 @@ export default function PixiStage() {
     let initialized = false;
 
     const safeDestroy = () => {
-      // Only destroy if init finished (otherwise Pixi may touch app.canvas and crash)
       if (!initialized) return;
 
       try {
-        // Remove canvas if mounted
         if (app.canvas?.parentElement) {
           app.canvas.parentElement.removeChild(app.canvas);
         }
@@ -30,14 +30,12 @@ export default function PixiStage() {
     (async () => {
       await app.init({
         resizeTo: host,
-        backgroundColor: 0x00ff00, // debug green
-        backgroundAlpha: 1,
+        backgroundAlpha: 0, // transparent overlay
         antialias: false,
       });
 
       initialized = true;
 
-      // If React already cleaned up (StrictMode/dev), tear down safely and exit
       if (cancelled) {
         safeDestroy();
         return;
@@ -45,11 +43,33 @@ export default function PixiStage() {
 
       host.appendChild(app.canvas);
 
-      const g = new Graphics();
-      g.rect(50, 50, 100, 100).fill(0x0000ff); // debug blue square
-      app.stage.addChild(g);
+      // Load a PNG from Vite public/
+      const texture = await Assets.load("/assets/pets/test.png"); // :contentReference[oaicite:3]{index=3}
 
-      console.log("Pixi running", app.renderer.width, app.renderer.height);
+      if (cancelled) {
+        safeDestroy();
+        return;
+      }
+
+      const pet = new Sprite(texture);
+
+      // Center-bottom-ish anchor so it “stands” on the overlay
+      pet.anchor.set(0.5, 1);
+
+      // Scale up cleanly (integer scaling is your friend for pixel art)
+      pet.scale.set(4);
+
+      // Position relative to current renderer size
+      pet.x = Math.floor(app.renderer.width / 2);
+      pet.y = Math.floor(app.renderer.height - 10);
+
+      app.stage.addChild(pet);
+
+      // Tiny “breathing” bob to prove animation loop is working
+      const baseY = pet.y;
+      app.ticker.add(() => {
+        pet.y = baseY + Math.round(Math.sin(performance.now() / 350) * 1);
+      });
     })();
 
     return () => {
