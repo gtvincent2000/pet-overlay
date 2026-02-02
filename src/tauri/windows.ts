@@ -12,9 +12,16 @@ export async function openOverlayWindow() {
     title: "Overlay",
     width: 420,
     height: 220,
+
     decorations: false,
     transparent: true,
+
+    shadow: false,
+    resizable: false,
+
     alwaysOnTop: true,
+    skipTaskbar: true,
+    focus: true,
   });
 
   win.once("tauri://error", (e) => {

@@ -6,3 +6,8 @@ html, body, #root {
   background: transparent;
   overflow: hidden;
 }
+
+canvas { 
+  display: block;
+  background: transparent;
+}
