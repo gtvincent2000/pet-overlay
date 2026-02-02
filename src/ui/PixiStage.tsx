@@ -24,6 +24,8 @@ export default function PixiStage() {
     let cancelled = false;
     let initialized = false;
 
+    let intervalId: number | undefined;
+
     const safeDestroy = () => {
       if (!initialized) return;
       try {
@@ -98,6 +100,27 @@ export default function PixiStage() {
         pet.gotoAndPlay(startFrame);
       };
 
+      const playOnce = (
+        textures: typeof clips[keyof typeof clips],
+        { speed = 0.12, startFrame = 0 }: { speed?: number; startFrame?: number } = {},
+        onDone?: () => void
+      ) => {
+        pet.textures = textures;
+        pet.animationSpeed = speed;
+        pet.loop = false;
+
+        // Clear any previous callback to avoid accidental chaining
+        pet.onComplete = undefined;
+
+        pet.onComplete = () => {
+          pet.onComplete = undefined;
+          onDone?.();
+        };
+
+        pet.gotoAndPlay(startFrame);
+      };
+
+
       pet.anchor.set(0.5, 1);
       pet.scale.set(4);
 
@@ -107,12 +130,23 @@ export default function PixiStage() {
       pet.animationSpeed = 0.12;
       playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
 
+      intervalId = window.setInterval(() => {
+        // tongue goes out, then return to normal idle
+        playOnce(clips.tongueExtend, { speed: 0.14 }, () => {
+          playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
+        });
+      }, 8000);
+
+
       app.stage.addChild(pet);
     })();
 
     return () => {
       cancelled = true;
       safeDestroy();
+      if (intervalId !== undefined) {
+        window.clearInterval(intervalId);
+      }
     };
   }, []);
 
