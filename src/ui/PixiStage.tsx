@@ -61,9 +61,28 @@ export default function PixiStage() {
         return;
       }
 
-      const frames = Object.values(sheet.textures); // now Texture[]
+      const frames = Object.entries(sheet.textures)
+      .sort(([a], [b]) => {
+        const na = Number(a.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
+        const nb = Number(b.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
+        return na - nb;
+      })
+      .map(([, tex]) => tex);
 
-      const pet = new AnimatedSprite(frames);
+      // Helper: inclusive range slice
+      const clip = (start: number, endInclusive: number) =>
+        frames.slice(start, endInclusive + 1);
+
+      // Clips (Aseprite frames 1–54 => indices 0–53)
+      const clips = {
+        wagTongueOutA: clip(0, 5),      // frames 1–6
+        tongueRetract: clip(6, 11),     // frames 7–12
+        wagTongueIn: clip(12, 41),      // frames 13–42
+        tongueExtend: clip(42, 47),     // frames 43–48
+        wagTongueOutB: clip(48, 53),    // frames 49–54
+      };
+
+      const pet = new AnimatedSprite(clips.wagTongueIn);
       pet.anchor.set(0.5, 1);
       pet.scale.set(4);
 
