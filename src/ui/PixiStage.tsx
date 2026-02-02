@@ -83,6 +83,21 @@ export default function PixiStage() {
       };
 
       const pet = new AnimatedSprite(clips.wagTongueIn);
+
+      const playClip = (
+        textures: typeof clips[keyof typeof clips],
+        {
+          speed = 0.12,
+          loop = true,
+          startFrame = 0,
+        }: { speed?: number; loop?: boolean; startFrame?: number } = {}
+      ) => {
+        pet.textures = textures;
+        pet.animationSpeed = speed;
+        pet.loop = loop;
+        pet.gotoAndPlay(startFrame);
+      };
+
       pet.anchor.set(0.5, 1);
       pet.scale.set(4);
 
@@ -90,7 +105,7 @@ export default function PixiStage() {
       pet.y = Math.floor(app.renderer.height - 10);
 
       pet.animationSpeed = 0.12;
-      pet.play();
+      playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
 
       app.stage.addChild(pet);
     })();
