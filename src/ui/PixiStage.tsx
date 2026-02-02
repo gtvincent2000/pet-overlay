@@ -120,6 +120,16 @@ export default function PixiStage() {
         pet.gotoAndPlay(startFrame);
       };
 
+      const playLoopForMs = (
+        textures: typeof clips[keyof typeof clips],
+        { speed = 0.12, ms = 1200 }: { speed?: number; ms?: number },
+        onDone?: () => void
+      ) => {
+        playClip(textures, { speed, loop: true });
+        window.setTimeout(() => {
+          onDone?.();
+        }, ms);
+      };
 
       pet.anchor.set(0.5, 1);
       pet.scale.set(4);
@@ -130,12 +140,25 @@ export default function PixiStage() {
       pet.animationSpeed = 0.12;
       playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
 
+      let isBlepRunning = false;
+
       intervalId = window.setInterval(() => {
-        // tongue goes out, then return to normal idle
+        if (isBlepRunning) return;
+        isBlepRunning = true;
+        // Step 1: tongue extends (once)
         playOnce(clips.tongueExtend, { speed: 0.14 }, () => {
-          playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
+          // Step 2: tongue-out wag loop for ~1.6 seconds (about 1–2 loops)
+          playLoopForMs(clips.wagTongueOutB, { speed: 0.14, ms: 1600 }, () => {
+            // Step 3: tongue retracts (once)
+            playOnce(clips.tongueRetract, { speed: 0.14 }, () => {
+              // Step 4: return to normal idle
+              playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
+              isBlepRunning = false;
+            });
+          });
         });
       }, 8000);
+
 
 
       app.stage.addChild(pet);
