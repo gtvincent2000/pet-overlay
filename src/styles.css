@@ -11,3 +11,30 @@ canvas {
   display: block;
   background: transparent;
 }
+
+.settings-page {
+  padding: 24px;
+}
+
+.settings-layout {
+  display: flex;
+  gap: 24px;
+}
+
+.settings-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 150px;
+}
+
+.settings-content {
+  flex: 1;
+}
+
+.pixel-panel {
+  backgound: #f8e8b8;
+  border: 4px solid #2b1d0e;
+  box-shadow: 4px 4px 0 #8b512b;
+  padding: 20px;
+}
