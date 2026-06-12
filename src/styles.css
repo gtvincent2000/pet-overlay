@@ -12,23 +12,24 @@ canvas {
   background: transparent;
 }
 
-.settings-page {
+/* Home Screen styles */
+.home-page {
   padding: 24px;
 }
 
-.settings-layout {
+.home-layout {
   display: flex;
   gap: 24px;
 }
 
-.settings-sidebar {
+.home-sidebar {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 150px;
 }
 
-.settings-content {
+.home-content {
   flex: 1;
 }
 

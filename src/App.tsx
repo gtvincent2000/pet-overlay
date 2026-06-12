@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Overlay from "./routes/Overlay";
-import Settings from "./routes/Settings";
+import Home from "./routes/Home";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/overlay" element={<Overlay />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="*" element={<Navigate to="/settings" replace />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }
