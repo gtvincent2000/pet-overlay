@@ -5,6 +5,22 @@ html, body, #root {
   height: 100%;
   background: transparent;
   overflow: hidden;
+
+  --panel-bg: #f8e8b8;
+
+  --panel-border: #2b1d0e;
+
+  --panel-shadow: #8b5a2b;
+
+  --button-bg: #9fdaf5;
+
+  --button-border: #81807c;
+
+  --button-shadow: #a0968d;
+
+  --button-shadow-hover: #918c89;
+
+  --text-primary: #2b1d0e;
 }
 
 canvas { 
@@ -34,17 +50,17 @@ canvas {
 }
 
 .pixel-panel {
-  backgound: #f8e8b8;
-  border: 4px solid #2b1d0e;
-  box-shadow: 4px 4px 0 #8b512b;
+  backgound: var(--panel-bg);
+  border: 4px solid var(--panel-border);
+  box-shadow: 4px 4px 0 var(--panel-shadow);
   padding: 20px;
 }
 
 /* Button Styles */
 .pixel-button {
-  background: #9fdaf5;
-  border: 3px solid #81807c;
-  box-shadow: 3px 3px 1px #a0968d;
+  background: var(--button-bg);
+  border: 3px solid var(--button-border);
+  box-shadow: 3px 3px 1px var(--button-shadow);
   padding: 8px 16px;
   font: inherit;
   cursor: pointer;
@@ -52,10 +68,10 @@ canvas {
 
 .pixel-button:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 #918c89;
+  box-shadow: 4px 4px 0 var(--button-shadow-hover);
 }
 
 .pixel-button:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px, 1px, 0 #918c89;
+  box-shadow: 1px, 1px, 0 var(--button-shadow-hover);
 }

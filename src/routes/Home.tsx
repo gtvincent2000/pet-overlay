@@ -7,7 +7,7 @@ export default function Home() {
     <div className="home-page">
       {/* Header Content */}
       <header className="home-header">
-        <h1>Overlay Pet</h1>
+        <h1>Overlay Companion</h1>
         <p>Desktop Companion Settings</p>
       </header>
 
