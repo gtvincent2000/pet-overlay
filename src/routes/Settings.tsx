@@ -1,5 +1,6 @@
 import { openOverlayWindow } from "../tauri/windows";
 import PixelPanel from "../ui/PixelPanel";
+import PixelButton from "../ui/PixelButton";
 
 export default function Settings() {
   return (
@@ -13,10 +14,10 @@ export default function Settings() {
       {/* Sidebar Settings Selection */}
       <div className="settings-layout">
         <aside className="settings-sidebar">
-          <button>Pet</button>
-          <button>Overlay</button>
-          <button>Timer</button>
-          <button>About</button>
+          <PixelButton>Pet</PixelButton>
+          <PixelButton>Overlay</PixelButton>
+          <PixelButton>Timer</PixelButton>
+          <PixelButton>About</PixelButton>
         </aside>
       
         {/* Primary Content */}
@@ -28,9 +29,9 @@ export default function Settings() {
               TODO: Configure pet overlay behavior
             </p>
 
-            <button onClick={openOverlayWindow}>
+            <PixelButton onClick={openOverlayWindow}>
               Open Overlay
-            </button>
+            </PixelButton>
           </PixelPanel>
         </main>
       </div>

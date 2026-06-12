@@ -38,3 +38,23 @@ canvas {
   box-shadow: 4px 4px 0 #8b512b;
   padding: 20px;
 }
+
+/* Button Styles */
+.pixel-button {
+  background: #9fdaf5;
+  border: 3px solid #81807c;
+  box-shadow: 3px 3px 1px #a0968d;
+  padding: 8px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pixel-button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #918c89;
+}
+
+.pixel-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px, 1px, 0 #918c89;
+}
