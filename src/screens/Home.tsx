@@ -2,7 +2,12 @@ import { openOverlayWindow } from "../tauri/windows";
 import PixelPanel from "../ui/PixelPanel";
 import PixelButton from "../ui/PixelButton";
 
-export default function Home() {
+type HomeProps = {
+  onOpenPetSelection: () => void;
+  onOpenSettings: () => void;
+};
+
+export default function Home({ onOpenPetSelection, onOpenSettings }: HomeProps) {
   return (
     <div className="home-page">
       {/* Header Content */}
@@ -19,10 +24,10 @@ export default function Home() {
               <PixelButton onClick={openOverlayWindow}>
                 Open Overlay
               </PixelButton>
-              <PixelButton>
+              <PixelButton onClick={onOpenPetSelection}>
                 Change Pet
               </PixelButton>
-              <PixelButton>
+              <PixelButton onClick={onOpenSettings}>
                 Settings
               </PixelButton>
             </div>
