@@ -8,30 +8,24 @@ export default function Home() {
       {/* Header Content */}
       <header className="home-header">
         <h1>Overlay Companion</h1>
-        <p>Desktop Companion Settings</p>
       </header>
 
       {/* Sidebar Settings Selection */}
       <div className="home-layout">
-        <aside className="home-sidebar">
-          <PixelButton>Pet</PixelButton>
-          <PixelButton>Overlay</PixelButton>
-          <PixelButton>Timer</PixelButton>
-          <PixelButton>About</PixelButton>
-        </aside>
-      
         {/* Primary Content */}
         <main className="home-content">
           <PixelPanel>
-            <h2>Welcome</h2>
-
-            <p>
-              TODO: Configure pet overlay behavior
-            </p>
-
-            <PixelButton onClick={openOverlayWindow}>
-              Open Overlay
-            </PixelButton>
+            <div className="home-menu">
+              <PixelButton onClick={openOverlayWindow}>
+                Open Overlay
+              </PixelButton>
+              <PixelButton>
+                Change Pet
+              </PixelButton>
+              <PixelButton>
+                Settings
+              </PixelButton>
+            </div>
           </PixelPanel>
         </main>
       </div>
