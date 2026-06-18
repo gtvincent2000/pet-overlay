@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Overlay from "./routes/Overlay";
-import Home from "./routes/Home";
+import Home from "./screens/Home";
 
 export default function App() {
   return (
