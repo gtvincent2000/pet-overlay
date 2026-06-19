@@ -21,6 +21,8 @@ html, body, #root {
   --button-shadow-hover: #918c89;
 
   --text-primary: #2b1d0e;
+
+  --selected-border: #d99a1e;
 }
 
 
@@ -148,6 +150,27 @@ canvas {
   flex-direction: column;
   align-items: center;
   gap: 8px;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+
+  cursor: pointer;
+  transition: transform 120ms ease;
+}
+
+.pet-card:hover {
+  transform: scale(1.04);
+}
+
+.pet-card-selected {
+  transform: scale(1.06);
+}
+
+.pet-card-selected .pet-card-box {
+  border-color: var(--selected-border);
+  box-shadow: 4px 4px 0 var(--panel-shadow);
 }
 
 .pet-card-name {

@@ -6,12 +6,22 @@ import PetSelection from "./screens/PetSelection";
 import Settings from "./screens/Settings";
 
 export default function App() {
+
+  // State for Screen Selection
   const [currentScreen, setCurrentScreen] =
     useState<"home" | "petSelection" | "settings">("home");
 
+  // State for Pet Selection
+  const [selectedPet, setSelectedPet] = 
+    useState<"Dog" | "Cat" | "Fox">("Dog");
+
   const renderMainScreen = () => {
     if (currentScreen === "petSelection") {
-      return <PetSelection onBack={() => setCurrentScreen("home")} />;
+      return <PetSelection 
+          onBack={() => setCurrentScreen("home")} 
+          selectedPet={selectedPet}
+          onSelectPet={setSelectedPet}
+        />;
     }
     if (currentScreen === "settings") {
       return <Settings onBack={() => setCurrentScreen("home")} />;

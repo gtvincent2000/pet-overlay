@@ -1,15 +1,24 @@
 type PetCardProps = {
     name: string;
+    isSelected: boolean;
+    onSelect: () => void;
 };
 
-export default function PetCard({ name }: PetCardProps) {
+export default function PetCard({ 
+    name,
+    isSelected,
+    onSelect,
+ }: PetCardProps) {
     return (
-        <div className="pet-card">
-            <p className="pet-card-names">{name}</p>
+        <button
+            className={`pet-card ${isSelected ? "pet-card-selected" : ""}`}
+            onClick={onSelect}
+        >
+            <p className="pet-card-name">{name}</p>
 
             <div className="pet-card-box">
                 Sprite Placeholder
             </div>
-        </div>
+        </button>
     );
 }
