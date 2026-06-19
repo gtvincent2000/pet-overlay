@@ -128,3 +128,48 @@ canvas {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--button-shadow-hover);
 }
+
+/* Pet Card Styles */
+
+.pet-selection-page {
+  min-height: 100vh;
+  padding: clamp(16px, 4vw, 48px);
+}
+
+.pet-selection-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.pet-card-name {
+  margin: 0;
+  text-align: center;
+}
+
+.pet-card-box {
+  width: 200px;
+  height: 200px;
+
+  border: 4px solid var(--panel-border);
+  background: var(--panel-bg);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 180px);
+  gap: 70px;
+  justify-content: center;
+}
