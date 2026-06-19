@@ -1,4 +1,4 @@
-import PixelButton from "../ui/PixelButton";
+import BackButton from "../ui/BackButton";
 
 type SettingsProps = {
   onBack: () => void;
@@ -6,10 +6,12 @@ type SettingsProps = {
 
 export default function Settings ({ onBack }: SettingsProps) {
   return (
-    <div className="settings-page">
-      <h1>Settings</h1>
-      <p>Settings screen coming soon.</p>
-      <PixelButton onClick={onBack}>Back</PixelButton>
+    <div className="screen-page">
+      <div className="settings-page">
+        <BackButton onClick={onBack}>←Back</BackButton>
+        <h1>Settings</h1>
+        <p>Settings screen coming soon.</p>
+      </div>
     </div>
   )
 }

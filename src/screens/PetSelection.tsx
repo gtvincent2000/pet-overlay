@@ -1,4 +1,4 @@
-import PixelButton from "../ui/PixelButton";
+import BackButton from "../ui/BackButton";
 
 type PetSelectionProps = {
   onBack: () => void;
@@ -6,9 +6,11 @@ type PetSelectionProps = {
 
 export default function PetSelection({ onBack }: PetSelectionProps) {
   return (
-    <div className="pet-selection-page">
-      <PixelButton onClick={onBack}>Back</PixelButton>
-      <h1>Pets</h1>
+    <div className="screen-page">
+      <div className="pet-selection-page">
+        <BackButton onClick={onBack}>←Back</BackButton>
+        <h1>Pets</h1>
+      </div>
     </div>
   );
 }
