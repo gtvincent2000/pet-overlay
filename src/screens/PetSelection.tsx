@@ -1,7 +1,6 @@
 import BackButton from "../ui/BackButton";
 import PetCard from "../ui/PetCard";
-
-type PetName = "Dog" | "Cat" | "Fox";
+import { pets, type PetName } from "../data/pets";
 
 type PetSelectionProps = {
   onBack: () => void;
@@ -14,8 +13,6 @@ export default function PetSelection({
   selectedPet,
   onSelectPet,
  }: PetSelectionProps) {
-
-  const pets: PetName[] = ["Dog", "Cat", "Fox"]
 
   return (
     <div className="screen-page">
