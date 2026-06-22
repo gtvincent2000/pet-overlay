@@ -1,6 +1,7 @@
 use tauri::{
     menu::MenuBuilder,
     tray::TrayIconBuilder,
+    Manager,
 };
 
 #[tauri::command]
@@ -25,16 +26,21 @@ pub fn run() {
                 .tooltip("Overlay Companion")
                 .icon(app.default_window_icon().unwrap().clone())
                 .menu(&menu)
-                .on_menu_event(|_app, event| {
+                .on_menu_event(|app_handle, event| {
                     match event.id().as_ref() {
                         "open_menu" => {
-                            println!("Open Menu clicked");
+                            if let Some(window) = app_handle.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
                         }
                         "open_overlay" => {
                             println!("Open Overlay clicked");
                         }
                         "close_overlay" => {
-                            println!("Close Overlay clicked");
+                            if let Some(window) = app_handle.get_webview_window("overlay") {
+                                let _ = window.close();
+                            }
                         }
                         "quit" => {
                             println!("Quit App clicked");
