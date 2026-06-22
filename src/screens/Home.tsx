@@ -1,4 +1,4 @@
-import { openOverlayWindow, closeCurrentWindow } from "../tauri/windows";
+import { openOverlayWindow, closeOverlayWindow, closeCurrentWindow } from "../tauri/windows";
 import PixelPanel from "../ui/PixelPanel";
 import PixelButton from "../ui/PixelButton";
 
@@ -32,6 +32,9 @@ export default function Home({ onOpenPetSelection, onOpenSettings }: HomeProps) 
               </PixelButton>
               <PixelButton onClick={closeCurrentWindow}>
                 Close Menu
+              </PixelButton>
+              <PixelButton onClick={closeOverlayWindow}>
+                Close Overlay
               </PixelButton>
             </div>
           </PixelPanel>
