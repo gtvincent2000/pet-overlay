@@ -12,6 +12,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "pet-overlay",
         "width": 800,
         "height": 600
