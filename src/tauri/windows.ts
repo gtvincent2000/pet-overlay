@@ -1,4 +1,9 @@
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+
+export async function closeCurrentWindow() {
+  await getCurrentWindow().close();
+}
 
 export async function openOverlayWindow() {
   const existing = await WebviewWindow.getByLabel("overlay");
