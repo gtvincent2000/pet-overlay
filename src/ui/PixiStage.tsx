@@ -18,10 +18,32 @@ type PixiStageProps = {
   selectedPet: PetName;
 };
 
+// TEMP
+function getPetPlaceholderTint(pet: PetName) {
+  switch (pet) {
+    case "Dog":
+      return 0xffffff;
+    case "Cat":
+      return 0xffc36b;
+    case "Fox":
+      return 0xff8c42;
+  }
+}
+
 export default function PixiStage({ selectedPet }: PixiStageProps) {
-  console.log("PixiStage selected pet:", selectedPet);
-  
+
   const hostRef = useRef<HTMLDivElement | null>(null);
+  
+  const petSpriteRef = useRef<AnimatedSprite | null>(null);
+  const selectedPetRef = useRef(selectedPet);
+
+  useEffect(() => {
+    selectedPetRef.current = selectedPet;
+
+    if (petSpriteRef.current) {
+      petSpriteRef.current.tint = getPetPlaceholderTint(selectedPet);
+    }
+  }, [selectedPet]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -92,6 +114,8 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       };
 
       const pet = new AnimatedSprite(clips.wagTongueIn);
+      petSpriteRef.current = pet;
+      pet.tint = getPetPlaceholderTint(selectedPetRef.current);
 
       const playClip = (
         textures: typeof clips[keyof typeof clips],
@@ -173,6 +197,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
 
     return () => {
       cancelled = true;
+      petSpriteRef.current = null;
       safeDestroy();
       if (intervalId !== undefined) {
         window.clearInterval(intervalId);
