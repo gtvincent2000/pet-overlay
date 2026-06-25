@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import type { PetName } from "../data/pets";
 import {
   Application,
   Assets,
@@ -13,7 +14,13 @@ type AtlasLike = {
   textures: Record<string, Texture>;
 };
 
-export default function PixiStage() {
+type PixiStageProps = {
+  selectedPet: PetName;
+};
+
+export default function PixiStage({ selectedPet }: PixiStageProps) {
+  console.log("PixiStage selected pet:", selectedPet);
+  
   const hostRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
