@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import PixiStage from "../ui/PixiStage";
 import { getCurrentWindow, LogicalPosition } from "@tauri-apps/api/window";
+import { getStoredSelectedPet } from "../data/petStorage";
 
 const KEY = "overlay-position";
 
 export default function Overlay() {
   const win = getCurrentWindow();
+  const selectedPet = getStoredSelectedPet();
 
   // Restore once when overlay mounts
   useEffect(() => {
@@ -52,6 +54,22 @@ export default function Overlay() {
         await win.startDragging();
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          top: 8,
+          left: 8,
+          color: "white",
+          background: "rgba(0, 0, 0, 0.5)",
+          padding: "4px 8px",
+          borderRadius: 4,
+          fontSize: 12,
+          pointerEvents: "none",
+        }}
+      >
+        Selected Pet: {selectedPet}
+      </div>
+      
       <PixiStage />
     </div>
   );
