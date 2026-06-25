@@ -2,6 +2,8 @@ use tauri::{
     menu::MenuBuilder,
     tray::TrayIconBuilder,
     Manager,
+    WebviewUrl,
+    WebviewWindowBuilder,
 };
 
 #[tauri::command]
@@ -35,7 +37,34 @@ pub fn run() {
                             }
                         }
                         "open_overlay" => {
-                            println!("Open Overlay clicked");
+                            if let Some(window) = app_handle.get_webview_window("overlay") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                return;
+                            }
+
+                            let app_handle = app_handle.clone();
+
+                            std::thread::spawn(move || {
+                                let result = WebviewWindowBuilder::new(
+                                    &app_handle,
+                                    "overlay",
+                                    WebviewUrl::App("index.html#/overlay".into()),
+                                )
+                                .title("Overlay")
+                                .inner_size(420.0, 220.0)
+                                .decorations(false)
+                                .transparent(true)
+                                .shadow(false)
+                                .resizable(false)
+                                .always_on_top(true)
+                                .skip_taskbar(true)
+                                .build();
+
+                                if let Err(error) = result {
+                                    eprintln!("Failed to create overlay window: {error}");
+                                }
+                            });
                         }
                         "close_overlay" => {
                             if let Some(window) = app_handle.get_webview_window("overlay") {
