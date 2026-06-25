@@ -1,29 +1,20 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { isPetName, type PetName } from "./data/pets";
+import type { PetName } from "./data/pets";
+import { getStoredSelectedPet, saveSelectedPet } from "./data/petStorage";
 import Overlay from "./routes/Overlay";
 import Home from "./screens/Home";
 import PetSelection from "./screens/PetSelection";
 import Settings from "./screens/Settings";
 
-const SELECTED_PET_STORAGE_KEY = "selectedPet";
-
 export default function App() {
   const [currentScreen, setCurrentScreen] =
     useState<"home" | "petSelection" | "settings">("home");
 
-  const [selectedPet, setSelectedPet] = useState<PetName>(() => {
-    const savedPet = localStorage.getItem(SELECTED_PET_STORAGE_KEY);
-
-    if (isPetName(savedPet)) {
-      return savedPet;
-    }
-
-    return "Dog";
-  });
+  const [selectedPet, setSelectedPet] = useState<PetName>(getStoredSelectedPet);
 
   useEffect(() => {
-    localStorage.setItem(SELECTED_PET_STORAGE_KEY, selectedPet);
+    saveSelectedPet(selectedPet);
   }, [selectedPet]);
 
   const renderMainScreen = () => {
