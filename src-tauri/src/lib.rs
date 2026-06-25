@@ -72,7 +72,7 @@ pub fn run() {
                             }
                         }
                         "quit" => {
-                            println!("Quit App clicked");
+                            app_handle.exit(0);
                         }
                         _ => {}
                     }
