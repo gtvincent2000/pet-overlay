@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PixiStage from "../ui/PixiStage";
 import { getCurrentWindow, LogicalPosition } from "@tauri-apps/api/window";
 import { getStoredSelectedPet } from "../data/petStorage";
+import { listen } from "@tauri-apps/api/event";
+import type { PetName } from "../data/pets";
+import { SELECTED_PET_CHANGED_EVENT } from "../data/petEvents";
 
 const KEY = "overlay-position";
 
 export default function Overlay() {
   const win = getCurrentWindow();
-  const selectedPet = getStoredSelectedPet();
+  const [selectedPet, setSelectedPet] = useState<PetName>(getStoredSelectedPet);
 
   // Restore once when overlay mounts
   useEffect(() => {
@@ -39,6 +42,29 @@ export default function Overlay() {
     };
   }, [win]);
 
+  useEffect(() => {
+    const setupListener = async () => {
+      const unlisten = await listen<PetName>(
+        SELECTED_PET_CHANGED_EVENT,
+        (event) => {
+          setSelectedPet(event.payload);
+        }
+      );
+
+      return unlisten;
+    };
+
+    let cleanup: (() => void) | undefined;
+
+    setupListener().then((unlisten) => {
+      cleanup = unlisten;
+    });
+
+    return () => {
+      cleanup?.();
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -69,7 +95,7 @@ export default function Overlay() {
       >
         Selected Pet: {selectedPet}
       </div>
-      
+
       <PixiStage />
     </div>
   );

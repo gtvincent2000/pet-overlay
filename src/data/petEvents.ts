@@ -1,0 +1,1 @@
+export const SELECTED_PET_CHANGED_EVENT = "selected-pet-changed";

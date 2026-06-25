@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { PetName } from "./data/pets";
 import { getStoredSelectedPet, saveSelectedPet } from "./data/petStorage";
+import { emit } from "@tauri-apps/api/event";
+import { SELECTED_PET_CHANGED_EVENT } from "./data/petEvents";
 import Overlay from "./routes/Overlay";
 import Home from "./screens/Home";
 import PetSelection from "./screens/PetSelection";
@@ -15,6 +17,10 @@ export default function App() {
 
   useEffect(() => {
     saveSelectedPet(selectedPet);
+
+    emit(SELECTED_PET_CHANGED_EVENT, selectedPet).catch((error) => {
+      console.error("failed to emit selected petchange:", error);
+    });
   }, [selectedPet]);
 
   const renderMainScreen = () => {
