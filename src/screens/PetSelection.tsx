@@ -1,6 +1,6 @@
 import BackButton from "../ui/BackButton";
 import PetCard from "../ui/PetCard";
-import { pets, type PetName } from "../data/pets";
+import { petDefinitions, type PetName } from "../data/pets";
 
 type PetSelectionProps = {
   onBack: () => void;
@@ -21,12 +21,12 @@ export default function PetSelection({
         <h1>Pets</h1>
 
         <div className="pet-grid">
-          {pets.map((pet) => (
+          {petDefinitions.map((pet) => (
             <PetCard
-              key={pet}
-              name={pet}
-              isSelected={selectedPet === pet}
-              onSelect={() => onSelectPet(pet)}
+              key={pet.name}
+              name={pet.displayName}
+              isSelected={selectedPet === pet.name}
+              onSelect={() => onSelectPet(pet.name)}
             />
           ))}
         </div>

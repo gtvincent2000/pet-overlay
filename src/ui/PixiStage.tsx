@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { PetName } from "../data/pets";
+import { getPetDefinition, type PetName } from "../data/pets";
 import {
   Application,
   Assets,
@@ -18,17 +18,6 @@ type PixiStageProps = {
   selectedPet: PetName;
 };
 
-// TEMP
-function getPetPlaceholderTint(pet: PetName) {
-  switch (pet) {
-    case "Dog":
-      return 0xffffff;
-    case "Cat":
-      return 0xffc36b;
-    case "Fox":
-      return 0xff8c42;
-  }
-}
 
 export default function PixiStage({ selectedPet }: PixiStageProps) {
 
@@ -40,8 +29,10 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
   useEffect(() => {
     selectedPetRef.current = selectedPet;
 
+    const petDefinition = getPetDefinition(selectedPet);
+
     if (petSpriteRef.current) {
-      petSpriteRef.current.tint = getPetPlaceholderTint(selectedPet);
+      petSpriteRef.current.tint = petDefinition.placeholderTint;
     }
   }, [selectedPet]);
 
@@ -83,8 +74,10 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
 
       host.appendChild(app.canvas);
 
+      const initialPetDefinition = getPetDefinition(selectedPetRef.current);
+
       const sheet = (await Assets.load(
-        "/assets/pets/Milbie_v2.json"
+        initialPetDefinition.spriteSheetPath
       )) as AtlasLike;
 
       if (cancelled) {
@@ -114,8 +107,12 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       };
 
       const pet = new AnimatedSprite(clips.wagTongueIn);
+
+      const petDefinition = getPetDefinition(selectedPetRef.current);
+
       petSpriteRef.current = pet;
-      pet.tint = getPetPlaceholderTint(selectedPetRef.current);
+      pet.tint = petDefinition.placeholderTint;
+      
 
       const playClip = (
         textures: typeof clips[keyof typeof clips],
