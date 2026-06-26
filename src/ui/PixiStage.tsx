@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
-import { getPetDefinition, type PetName } from "../data/pets";
+
+import { 
+  getPetDefinition,
+  type PetAnimationName,
+  type PetDefinition,
+  type PetName,
+} from "../data/pets";
+
 import {
   Application,
   Assets,
@@ -18,6 +25,56 @@ type PixiStageProps = {
   selectedPet: PetName;
 };
 
+type AnimationClips = Partial<Record<PetAnimationName, Texture[]>>;
+
+function getSortedFrames(sheet: AtlasLike): Texture[] {
+  return Object.entries(sheet.textures)
+    .sort(([a], [b]) => {
+      const na = Number(a.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
+      const nb = Number(b.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
+      return na - nb;
+    })
+    .map(([, tex]) => tex);
+}
+
+function buildAnimationClips(
+  sheet: AtlasLike,
+  petDefinition: PetDefinition
+): AnimationClips {
+  const frames = getSortedFrames(sheet);
+  const clips: AnimationClips = {};
+
+  for (const animation of petDefinition.animations) {
+    const startIndex = animation.startFrame - 1;
+    const endIndexExclusive = animation.endFrame;
+
+    clips[animation.name] = frames.slice(startIndex, endIndexExclusive);
+  }
+
+  return clips;
+}
+
+function getAnimationDefinition(
+  petDefinition: PetDefinition,
+  animationName: PetAnimationName
+) {
+  return petDefinition.animations.find(
+    (animation) => animation.name === animationName
+  );
+}
+
+function getRequiredClip(
+  clips: AnimationClips,
+  animationName: PetAnimationName
+): Texture[] {
+  const clip = clips[animationName];
+
+  if (!clip || clip.length === 0) {
+    throw new Error(`Missing animation clip: ${animationName}`);
+  }
+
+  return clip;
+}
 
 export default function PixiStage({ selectedPet }: PixiStageProps) {
 
@@ -85,28 +142,12 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         return;
       }
 
-      const frames = Object.entries(sheet.textures)
-      .sort(([a], [b]) => {
-        const na = Number(a.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
-        const nb = Number(b.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
-        return na - nb;
-      })
-      .map(([, tex]) => tex);
+      const clips = buildAnimationClips(sheet, initialPetDefinition);
 
-      // Helper: inclusive range slice
-      const clip = (start: number, endInclusive: number) =>
-        frames.slice(start, endInclusive + 1);
+      const defaultAnimationName = initialPetDefinition.defaultOverlayAnimation;
+      const defaultFrames = getRequiredClip(clips, defaultAnimationName);
 
-      // Clips (Aseprite frames 1–54 => indices 0–53)
-      const clips = {
-        wagTongueOutA: clip(0, 5),      // frames 1–6
-        tongueRetract: clip(6, 11),     // frames 7–12
-        wagTongueIn: clip(12, 41),      // frames 13–42
-        tongueExtend: clip(42, 47),     // frames 43–48
-        wagTongueOutB: clip(48, 53),    // frames 49–54
-      };
-
-      const pet = new AnimatedSprite(clips.wagTongueIn);
+      const pet = new AnimatedSprite(defaultFrames);
 
       const petDefinition = getPetDefinition(selectedPetRef.current);
 
@@ -115,7 +156,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       
 
       const playClip = (
-        textures: typeof clips[keyof typeof clips],
+        textures: Texture[],
         {
           speed = 0.12,
           loop = true,
@@ -129,7 +170,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       };
 
       const playOnce = (
-        textures: typeof clips[keyof typeof clips],
+        textures: Texture[],
         { speed = 0.12, startFrame = 0 }: { speed?: number; startFrame?: number } = {},
         onDone?: () => void
       ) => {
@@ -149,7 +190,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       };
 
       const playLoopForMs = (
-        textures: typeof clips[keyof typeof clips],
+        textures: Texture[],
         { speed = 0.12, ms = 1200 }: { speed?: number; ms?: number },
         onDone?: () => void
       ) => {
@@ -165,26 +206,73 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       pet.x = Math.floor(app.renderer.width / 2);
       pet.y = Math.floor(app.renderer.height - 10);
 
-      pet.animationSpeed = 0.12;
-      playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
+      const defaultAnimation = getAnimationDefinition(
+        initialPetDefinition,
+        defaultAnimationName
+      );
+
+      playClip(defaultFrames, {
+        speed: defaultAnimation?.frameRate ?? 0.12,
+        loop: defaultAnimation?.loop ?? true,
+      });
+      
+      const idleClip = getRequiredClip(clips, "idle");
+      const tongueExtendClip = getRequiredClip(clips, "tongueExtend");
+      const tongueOutIdleClip = getRequiredClip(clips, "tongueOutIdle");
+      const tongueRetractClip = getRequiredClip(clips, "tongueRetract");
+
+      const idleAnimation = getAnimationDefinition(initialPetDefinition, "idle");
+      const tongueExtendAnimation = getAnimationDefinition(
+        initialPetDefinition,
+        "tongueExtend"
+      );
+      const tongueOutIdleAnimation = getAnimationDefinition(
+        initialPetDefinition,
+        "tongueOutIdle"
+      );
+      const tongueRetractAnimation = getAnimationDefinition(
+        initialPetDefinition,
+        "tongueRetract"
+      );
 
       let isBlepRunning = false;
 
       intervalId = window.setInterval(() => {
         if (isBlepRunning) return;
+
         isBlepRunning = true;
-        // Step 1: tongue extends (once)
-        playOnce(clips.tongueExtend, { speed: 0.14 }, () => {
-          // Step 2: tongue-out wag loop for ~1.6 seconds (about 1–2 loops)
-          playLoopForMs(clips.wagTongueOutB, { speed: 0.14, ms: 1600 }, () => {
-            // Step 3: tongue retracts (once)
-            playOnce(clips.tongueRetract, { speed: 0.14 }, () => {
-              // Step 4: return to normal idle
-              playClip(clips.wagTongueIn, { speed: 0.12, loop: true });
-              isBlepRunning = false;
-            });
-          });
-        });
+
+        playOnce(
+          tongueExtendClip,
+          {
+            speed: tongueExtendAnimation?.frameRate ?? 0.14,
+          },
+          () => {
+            playLoopForMs(
+              tongueOutIdleClip,
+              {
+                speed: tongueOutIdleAnimation?.frameRate ?? 0.14,
+                ms: 1600,
+              },
+              () => {
+                playOnce(
+                  tongueRetractClip,
+                  {
+                    speed: tongueRetractAnimation?.frameRate ?? 0.14,
+                  },
+                  () => {
+                    playClip(idleClip, {
+                      speed: idleAnimation?.frameRate ?? 0.12,
+                      loop: idleAnimation?.loop ?? true,
+                    });
+
+                    isBlepRunning = false;
+                  }
+                );
+              }
+            );
+          }
+        );
       }, 8000);
 
 

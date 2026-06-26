@@ -2,14 +2,19 @@ export type PetName = "Dog" | "Cat" | "Fox";
 
 export type PetAnimationName =
   | "idle"
-  | "blep"
+  | "tongueExtend"
+  | "tongueOutIdle"
+  | "tongueRetract"
   | "sleep"
   | "play";
 
 export type PetAnimationDefinition = {
   name: PetAnimationName;
-  framePrefix: string;
-  frameCount: number;
+
+  // 1-based Aseprite frame numbers
+  startFrame: number;
+  endFrame: number;
+
   frameRate: number;
   loop: boolean;
 };
@@ -36,16 +41,30 @@ export const petDefinitions: PetDefinition[] = [
     animations: [
       {
         name: "idle",
-        framePrefix: "wagTongueIn",
-        frameCount: 6,
+        startFrame: 13,
+        endFrame: 42,
         frameRate: 0.12,
         loop: true,
       },
       {
-        name: "blep",
-        framePrefix: "tongueOut",
-        frameCount: 6,
-        frameRate: 0.16,
+        name: "tongueExtend",
+        startFrame: 43,
+        endFrame: 48,
+        frameRate: 0.14,
+        loop: false,
+      },
+      {
+        name: "tongueOutIdle",
+        startFrame: 49,
+        endFrame: 54,
+        frameRate: 0.14,
+        loop: true,
+      },
+      {
+        name: "tongueRetract",
+        startFrame: 7,
+        endFrame: 12,
+        frameRate: 0.14,
         loop: false,
       },
     ],
@@ -60,16 +79,30 @@ export const petDefinitions: PetDefinition[] = [
     animations: [
       {
         name: "idle",
-        framePrefix: "wagTongueIn",
-        frameCount: 6,
+        startFrame: 13,
+        endFrame: 42,
         frameRate: 0.12,
         loop: true,
       },
       {
-        name: "blep",
-        framePrefix: "tongueOut",
-        frameCount: 6,
-        frameRate: 0.16,
+        name: "tongueExtend",
+        startFrame: 43,
+        endFrame: 48,
+        frameRate: 0.14,
+        loop: false,
+      },
+      {
+        name: "tongueOutIdle",
+        startFrame: 49,
+        endFrame: 54,
+        frameRate: 0.14,
+        loop: true,
+      },
+      {
+        name: "tongueRetract",
+        startFrame: 7,
+        endFrame: 12,
+        frameRate: 0.14,
         loop: false,
       },
     ],
@@ -84,16 +117,30 @@ export const petDefinitions: PetDefinition[] = [
     animations: [
       {
         name: "idle",
-        framePrefix: "wagTongueIn",
-        frameCount: 6,
+        startFrame: 13,
+        endFrame: 42,
         frameRate: 0.12,
         loop: true,
       },
       {
-        name: "blep",
-        framePrefix: "tongueOut",
-        frameCount: 6,
-        frameRate: 0.16,
+        name: "tongueExtend",
+        startFrame: 43,
+        endFrame: 48,
+        frameRate: 0.14,
+        loop: false,
+      },
+      {
+        name: "tongueOutIdle",
+        startFrame: 49,
+        endFrame: 54,
+        frameRate: 0.14,
+        loop: true,
+      },
+      {
+        name: "tongueRetract",
+        startFrame: 7,
+        endFrame: 12,
+        frameRate: 0.14,
         loop: false,
       },
     ],
