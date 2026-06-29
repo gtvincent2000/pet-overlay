@@ -76,6 +76,19 @@ function getRequiredClip(
   return clip;
 }
 
+function getOptionalClip(
+  clips: AnimationClips,
+  animationName: PetAnimationName
+): Texture[] | undefined {
+  const clip = clips[animationName];
+
+  if (!clip || clip.length === 0) {
+    return undefined;
+  }
+
+  return clip;
+}
+
 export default function PixiStage({ selectedPet }: PixiStageProps) {
 
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -217,9 +230,9 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       });
       
       const idleClip = getRequiredClip(clips, "idle");
-      const tongueExtendClip = getRequiredClip(clips, "tongueExtend");
-      const tongueOutIdleClip = getRequiredClip(clips, "tongueOutIdle");
-      const tongueRetractClip = getRequiredClip(clips, "tongueRetract");
+      const tongueExtendClip = getOptionalClip(clips, "tongueExtend");
+      const tongueOutIdleClip = getOptionalClip(clips, "tongueOutIdle");
+      const tongueRetractClip = getOptionalClip(clips, "tongueRetract");
 
       const idleAnimation = getAnimationDefinition(initialPetDefinition, "idle");
       const tongueExtendAnimation = getAnimationDefinition(
@@ -235,6 +248,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         "tongueRetract"
       );
 
+      if (tongueExtendClip && tongueOutIdleClip && tongueRetractClip) {
       let isBlepRunning = false;
 
       intervalId = window.setInterval(() => {
@@ -274,7 +288,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
           }
         );
       }, 8000);
-
+    }
 
 
       app.stage.addChild(pet);

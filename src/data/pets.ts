@@ -84,27 +84,6 @@ export const petDefinitions: PetDefinition[] = [
         frameRate: 0.12,
         loop: true,
       },
-      {
-        name: "tongueExtend",
-        startFrame: 43,
-        endFrame: 48,
-        frameRate: 0.14,
-        loop: false,
-      },
-      {
-        name: "tongueOutIdle",
-        startFrame: 49,
-        endFrame: 54,
-        frameRate: 0.14,
-        loop: true,
-      },
-      {
-        name: "tongueRetract",
-        startFrame: 7,
-        endFrame: 12,
-        frameRate: 0.14,
-        loop: false,
-      },
     ],
   },
   {
