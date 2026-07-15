@@ -24,6 +24,8 @@ export type PetDefinition = {
   displayName: string;
   spriteSheetPath: string;
   placeholderTint: number;
+
+  renderScale: number;
   
   previewAnimation: PetAnimationName;
   defaultOverlayAnimation: PetAnimationName;
@@ -36,6 +38,7 @@ export const petDefinitions: PetDefinition[] = [
     displayName: "Dog",
     spriteSheetPath: "/assets/pets/Milbie_v2.json",
     placeholderTint: 0xffffff,
+    renderScale: 4,
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     animations: [
@@ -72,16 +75,17 @@ export const petDefinitions: PetDefinition[] = [
   {
     name: "Cat",
     displayName: "Cat",
-    spriteSheetPath: "/assets/pets/Milbie_v2.json",
-    placeholderTint: 0xffc36b,
+    spriteSheetPath: "/assets/pets/cat/Biscuits_v1.json",
+    placeholderTint: 0xffffff,
+    renderScale: 4,
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     animations: [
       {
         name: "idle",
-        startFrame: 13,
-        endFrame: 42,
-        frameRate: 0.12,
+        startFrame: 1,
+        endFrame: 28,
+        frameRate: 0.14,
         loop: true,
       },
     ],
@@ -91,6 +95,7 @@ export const petDefinitions: PetDefinition[] = [
     displayName: "Fox",
     spriteSheetPath: "/assets/pets/Milbie_v2.json",
     placeholderTint: 0xff8c42,
+    renderScale: 4,
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     animations: [

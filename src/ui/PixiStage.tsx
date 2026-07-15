@@ -27,14 +27,31 @@ type PixiStageProps = {
 
 type AnimationClips = Partial<Record<PetAnimationName, Texture[]>>;
 
+function getFrameNumberFromTextureName(textureName: string) {
+  const match = textureName.match(/(\d+)(?=\D*$)/);
+
+  if (!match) {
+    return undefined;
+  }
+
+  return Number(match[1]);
+}
+
 function getSortedFrames(sheet: AtlasLike): Texture[] {
   return Object.entries(sheet.textures)
-    .sort(([a], [b]) => {
-      const na = Number(a.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
-      const nb = Number(b.match(/(\d+)\.aseprite$/)?.[1] ?? 0);
-      return na - nb;
+    .map(([name, texture], index) => ({
+      name,
+      texture,
+      index,
+      frameNumber: getFrameNumberFromTextureName(name),
+    }))
+    .sort((a, b) => {
+      const aSortValue = a.frameNumber ?? a.index;
+      const bSortValue = b.frameNumber ?? b.index;
+
+      return aSortValue - bSortValue;
     })
-    .map(([, tex]) => tex);
+    .map((entry) => entry.texture);
 }
 
 function buildAnimationClips(
@@ -216,11 +233,12 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         pet = new AnimatedSprite(defaultFrames);
 
         pet.anchor.set(0.5, 1);
-        pet.scale.set(4);
 
         app.stage.addChild(pet);
         petSpriteRef.current = pet;
       }
+
+      pet.scale.set(petDefinition.renderScale);
 
       pet.stop();
       pet.onComplete = undefined;
