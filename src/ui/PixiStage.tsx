@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { 
   getPetDefinition,
@@ -92,19 +92,33 @@ function getOptionalClip(
 export default function PixiStage({ selectedPet }: PixiStageProps) {
 
   const hostRef = useRef<HTMLDivElement | null>(null);
-  
+
+  const appRef = useRef<Application | null>(null);
   const petSpriteRef = useRef<AnimatedSprite | null>(null);
+
+  const blepIntervalRef = useRef<number | undefined>(undefined);
+  const behaviorTimeoutRef = useRef<number | undefined>(undefined);
+
+  const animationRunIdRef = useRef(0);
   const selectedPetRef = useRef(selectedPet);
 
-  useEffect(() => {
-    selectedPetRef.current = selectedPet;
+  const [isPixiReady, setIsPixiReady] = useState(false);
 
-    const petDefinition = getPetDefinition(selectedPet);
+  const clearPetBehaviorTimers = () => {
+    if (blepIntervalRef.current !== undefined) {
+      window.clearInterval(blepIntervalRef.current);
+      blepIntervalRef.current = undefined;
+    }
+
+    if (behaviorTimeoutRef.current !== undefined) {
+      window.clearTimeout(behaviorTimeoutRef.current);
+      behaviorTimeoutRef.current = undefined;
+    }
 
     if (petSpriteRef.current) {
-      petSpriteRef.current.tint = petDefinition.placeholderTint;
+      petSpriteRef.current.onComplete = undefined;
     }
-  }, [selectedPet]);
+  };
 
   useEffect(() => {
     const host = hostRef.current;
@@ -114,14 +128,16 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
     let cancelled = false;
     let initialized = false;
 
-    let intervalId: number | undefined;
-
     const safeDestroy = () => {
       if (!initialized) return;
+
       try {
+        clearPetBehaviorTimers();
+
         if (app.canvas?.parentElement) {
           app.canvas.parentElement.removeChild(app.canvas);
         }
+
         app.destroy(true);
       } catch (e) {
         console.warn("Pixi safeDestroy warning:", e);
@@ -144,29 +160,76 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
 
       host.appendChild(app.canvas);
 
-      const initialPetDefinition = getPetDefinition(selectedPetRef.current);
+      appRef.current = app;
+      setIsPixiReady(true);
+    })();
+
+    return () => {
+      cancelled = true;
+
+      animationRunIdRef.current += 1;
+      petSpriteRef.current = null;
+      appRef.current = null;
+      setIsPixiReady(false);
+
+      safeDestroy();
+    };
+  }, []);
+
+  useEffect(() => {
+    selectedPetRef.current = selectedPet;
+
+    const app = appRef.current;
+
+    if (!isPixiReady || !app) {
+      return;
+    }
+
+    animationRunIdRef.current += 1;
+    const runId = animationRunIdRef.current;
+
+    clearPetBehaviorTimers();
+
+    let cancelled = false;
+
+    const isCurrentRun = () => {
+      return !cancelled && animationRunIdRef.current === runId;
+    };
+
+    (async () => {
+      const petDefinition = getPetDefinition(selectedPet);
 
       const sheet = (await Assets.load(
-        initialPetDefinition.spriteSheetPath
+        petDefinition.spriteSheetPath
       )) as AtlasLike;
 
-      if (cancelled) {
-        safeDestroy();
-        return;
-      }
+      if (!isCurrentRun()) return;
 
-      const clips = buildAnimationClips(sheet, initialPetDefinition);
+      const clips = buildAnimationClips(sheet, petDefinition);
 
-      const defaultAnimationName = initialPetDefinition.defaultOverlayAnimation;
+      const defaultAnimationName = petDefinition.defaultOverlayAnimation;
       const defaultFrames = getRequiredClip(clips, defaultAnimationName);
 
-      const pet = new AnimatedSprite(defaultFrames);
+      let pet = petSpriteRef.current;
 
-      const petDefinition = getPetDefinition(selectedPetRef.current);
+      if (!pet) {
+        pet = new AnimatedSprite(defaultFrames);
 
-      petSpriteRef.current = pet;
+        pet.anchor.set(0.5, 1);
+        pet.scale.set(4);
+
+        app.stage.addChild(pet);
+        petSpriteRef.current = pet;
+      }
+
+      pet.stop();
+      pet.onComplete = undefined;
+
+      pet.textures = defaultFrames;
       pet.tint = petDefinition.placeholderTint;
-      
+
+      pet.x = Math.floor(app.renderer.width / 2);
+      pet.y = Math.floor(app.renderer.height - 10);
 
       const playClip = (
         textures: Texture[],
@@ -176,6 +239,8 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
           startFrame = 0,
         }: { speed?: number; loop?: boolean; startFrame?: number } = {}
       ) => {
+        if (!isCurrentRun()) return;
+
         pet.textures = textures;
         pet.animationSpeed = speed;
         pet.loop = loop;
@@ -187,15 +252,19 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         { speed = 0.12, startFrame = 0 }: { speed?: number; startFrame?: number } = {},
         onDone?: () => void
       ) => {
+        if (!isCurrentRun()) return;
+
         pet.textures = textures;
         pet.animationSpeed = speed;
         pet.loop = false;
 
-        // Clear any previous callback to avoid accidental chaining
         pet.onComplete = undefined;
 
         pet.onComplete = () => {
           pet.onComplete = undefined;
+
+          if (!isCurrentRun()) return;
+
           onDone?.();
         };
 
@@ -208,19 +277,18 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         onDone?: () => void
       ) => {
         playClip(textures, { speed, loop: true });
-        window.setTimeout(() => {
+
+        behaviorTimeoutRef.current = window.setTimeout(() => {
+          behaviorTimeoutRef.current = undefined;
+
+          if (!isCurrentRun()) return;
+
           onDone?.();
         }, ms);
       };
 
-      pet.anchor.set(0.5, 1);
-      pet.scale.set(4);
-
-      pet.x = Math.floor(app.renderer.width / 2);
-      pet.y = Math.floor(app.renderer.height - 10);
-
       const defaultAnimation = getAnimationDefinition(
-        initialPetDefinition,
+        petDefinition,
         defaultAnimationName
       );
 
@@ -228,81 +296,78 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
         speed: defaultAnimation?.frameRate ?? 0.12,
         loop: defaultAnimation?.loop ?? true,
       });
-      
+
       const idleClip = getRequiredClip(clips, "idle");
+      const idleAnimation = getAnimationDefinition(petDefinition, "idle");
+
       const tongueExtendClip = getOptionalClip(clips, "tongueExtend");
       const tongueOutIdleClip = getOptionalClip(clips, "tongueOutIdle");
       const tongueRetractClip = getOptionalClip(clips, "tongueRetract");
 
-      const idleAnimation = getAnimationDefinition(initialPetDefinition, "idle");
       const tongueExtendAnimation = getAnimationDefinition(
-        initialPetDefinition,
+        petDefinition,
         "tongueExtend"
       );
       const tongueOutIdleAnimation = getAnimationDefinition(
-        initialPetDefinition,
+        petDefinition,
         "tongueOutIdle"
       );
       const tongueRetractAnimation = getAnimationDefinition(
-        initialPetDefinition,
+        petDefinition,
         "tongueRetract"
       );
 
       if (tongueExtendClip && tongueOutIdleClip && tongueRetractClip) {
-      let isBlepRunning = false;
+        let isBlepRunning = false;
 
-      intervalId = window.setInterval(() => {
-        if (isBlepRunning) return;
+        blepIntervalRef.current = window.setInterval(() => {
+          if (!isCurrentRun()) return;
+          if (isBlepRunning) return;
 
-        isBlepRunning = true;
+          isBlepRunning = true;
 
-        playOnce(
-          tongueExtendClip,
-          {
-            speed: tongueExtendAnimation?.frameRate ?? 0.14,
-          },
-          () => {
-            playLoopForMs(
-              tongueOutIdleClip,
-              {
-                speed: tongueOutIdleAnimation?.frameRate ?? 0.14,
-                ms: 1600,
-              },
-              () => {
-                playOnce(
-                  tongueRetractClip,
-                  {
-                    speed: tongueRetractAnimation?.frameRate ?? 0.14,
-                  },
-                  () => {
-                    playClip(idleClip, {
-                      speed: idleAnimation?.frameRate ?? 0.12,
-                      loop: idleAnimation?.loop ?? true,
-                    });
+          playOnce(
+            tongueExtendClip,
+            {
+              speed: tongueExtendAnimation?.frameRate ?? 0.14,
+            },
+            () => {
+              playLoopForMs(
+                tongueOutIdleClip,
+                {
+                  speed: tongueOutIdleAnimation?.frameRate ?? 0.14,
+                  ms: 1600,
+                },
+                () => {
+                  playOnce(
+                    tongueRetractClip,
+                    {
+                      speed: tongueRetractAnimation?.frameRate ?? 0.14,
+                    },
+                    () => {
+                      playClip(idleClip, {
+                        speed: idleAnimation?.frameRate ?? 0.12,
+                        loop: idleAnimation?.loop ?? true,
+                      });
 
-                    isBlepRunning = false;
-                  }
-                );
-              }
-            );
-          }
-        );
-      }, 8000);
-    }
-
-
-      app.stage.addChild(pet);
-    })();
+                      isBlepRunning = false;
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }, 8000);
+      }
+    })().catch((error) => {
+      console.error("Failed to setup selected pet animation:", error);
+    });
 
     return () => {
       cancelled = true;
-      petSpriteRef.current = null;
-      safeDestroy();
-      if (intervalId !== undefined) {
-        window.clearInterval(intervalId);
-      }
+      clearPetBehaviorTimers();
     };
-  }, []);
+  }, [selectedPet, isPixiReady]);
 
   return <div ref={hostRef} style={{ width: "100%", height: "100%" }} />;
 }
