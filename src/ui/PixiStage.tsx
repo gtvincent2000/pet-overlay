@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { 
+  DEFAULT_PET_NAME,
   getPetDefinition,
   type PetAnimationName,
   type PetDefinition,
@@ -104,6 +105,58 @@ function getOptionalClip(
   }
 
   return clip;
+}
+
+type LoadedPetResources = {
+  petDefinition: PetDefinition;
+  sheet: AtlasLike;
+  clips: AnimationClips;
+  defaultAnimationName: PetAnimationName;
+  defaultFrames: Texture[];
+};
+
+async function loadPetResources(
+  petDefinition: PetDefinition
+): Promise<LoadedPetResources> {
+  const sheet = (await Assets.load(
+    petDefinition.spriteSheetPath
+  )) as AtlasLike;
+
+  const clips = buildAnimationClips(sheet, petDefinition);
+
+  const defaultAnimationName = petDefinition.defaultOverlayAnimation;
+  const defaultFrames = getRequiredClip(clips, defaultAnimationName);
+
+  return {
+    petDefinition,
+    sheet,
+    clips,
+    defaultAnimationName,
+    defaultFrames,
+  };
+}
+
+async function loadPetResourcesWithFallback(
+  selectedPet: PetName
+): Promise<LoadedPetResources> {
+  const selectedPetDefinition = getPetDefinition(selectedPet);
+
+  try {
+    return await loadPetResources(selectedPetDefinition);
+  } catch (error) {
+    console.warn(
+      `Failed to load assets for ${selectedPetDefinition.name}. Falling back to ${DEFAULT_PET_NAME}.`,
+      error
+    );
+
+    if (selectedPet === DEFAULT_PET_NAME) {
+      throw error;
+    }
+
+    const fallbackPetDefinition = getPetDefinition(DEFAULT_PET_NAME);
+
+    return await loadPetResources(fallbackPetDefinition);
+  }
 }
 
 export default function PixiStage({ selectedPet }: PixiStageProps) {
@@ -214,18 +267,14 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
     };
 
     (async () => {
-      const petDefinition = getPetDefinition(selectedPet);
-
-      const sheet = (await Assets.load(
-        petDefinition.spriteSheetPath
-      )) as AtlasLike;
+      const {
+        petDefinition,
+        clips,
+        defaultAnimationName,
+        defaultFrames,
+      } = await loadPetResourcesWithFallback(selectedPet);
 
       if (!isCurrentRun()) return;
-
-      const clips = buildAnimationClips(sheet, petDefinition);
-
-      const defaultAnimationName = petDefinition.defaultOverlayAnimation;
-      const defaultFrames = getRequiredClip(clips, defaultAnimationName);
 
       let pet = petSpriteRef.current;
 

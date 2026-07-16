@@ -1,5 +1,7 @@
 export type PetName = "Dog" | "Cat" | "Fox";
 
+export const DEFAULT_PET_NAME: PetName = "Dog";
+
 export type PetAnimationName =
   | "idle"
   | "tongueExtend"
