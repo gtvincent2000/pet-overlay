@@ -15,11 +15,9 @@ export default function PetSelection({
  }: PetSelectionProps) {
 
   return (
-    <div className="screen-page">
-      <div className="pet-selection-page">
-        <BackButton onClick={onBack}>←Back</BackButton>
-        <h1>Pets</h1>
-
+    <div className="screen-page pet-selection-page">
+      <BackButton onClick={onBack}>←Back</BackButton>
+      <h1>Pets</h1>
         <div className="pet-grid">
           {petDefinitions.map((pet) => (
             <PetCard
@@ -30,7 +28,6 @@ export default function PetSelection({
             />
           ))}
         </div>
-      </div>
     </div>
   );
 }

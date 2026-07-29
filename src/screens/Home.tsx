@@ -1,5 +1,4 @@
 import { openOverlayWindow, closeOverlayWindow, hideCurrentWindow } from "../tauri/windows";
-import PixelPanel from "../ui/PixelPanel";
 import MenuButton from "../ui/MenuButton";
 
 type HomeProps = {
