@@ -23,6 +23,14 @@ html, body, #root {
   --text-primary: #2b1d0e;
 
   --selected-border: #d99a1e;
+
+  --pet-card-bg: #e6ae59;
+  --pet-card-hover-bg: #e6bc61;
+  --pet-card-selected-bg: #f0bc6f;
+
+  --pet-card-border: #d3902c;
+  --pet-card-selected-border: #ce8923;
+  --pet-card-shadow: #a85c15;
 }
 
 
@@ -109,25 +117,41 @@ canvas {
 /* Button Styles */
 
 .back-button {
-  background: var(--button-bg);
-  border: 2px solid var(--button-border);
-  box-shadow: 2px 1px 1px var(--button-shadow);
-  padding: 4px 8px;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  font: inherit;
+  width: 120px;
+  height: 28px;
+
+  border: none;
+  padding: 0;
+  background: transparent;
+
+  background-image: url("/assets/ui/menu-button-states.png");
+  background-repeat: no-repeat;
+  background-size: 360px 28px;
+  background-position: 0 0;
+
+  image-rendering: pixelated;
+
   cursor: pointer;
-  width: clamp(80px, 11vw, 130px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font: inherit;
+  color: var(--text-primary);
 }
 
 .back-button:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--button-shadow-hover);
+  background-position: -120px 0;
 }
 
 .back-button:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--button-shadow-hover);
+  background-position: -240px 0;
+}
+
+.back-button-label {
+  pointer-events: none;
+  transform: translateY(-1px);
 }
 
 .pixel-button {
@@ -213,17 +237,21 @@ canvas {
 }
 
 .pet-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-
   background: transparent;
   border: none;
   box-shadow: none;
   padding: 0;
+  margin: 0;
 
+  font: inherit;
+  color: inherit;
   cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
   transition: transform 120ms ease;
 }
 
@@ -231,13 +259,17 @@ canvas {
   transform: scale(1.04);
 }
 
+.pet-card:hover .pet-card-box {
+  background: var(--pet-card-hover-bg);
+}
+
 .pet-card-selected {
   transform: scale(1.06);
 }
 
 .pet-card-selected .pet-card-box {
-  border-color: var(--selected-border);
-  box-shadow: 4px 4px 0 var(--panel-shadow);
+  background: var(--pet-card-selected-bg);
+  border-color: var(--pet-card-selected-border);
 }
 
 .pet-card-name {
@@ -246,15 +278,18 @@ canvas {
 }
 
 .pet-card-box {
-  width: 200px;
-  height: 200px;
+  width: 192px;
+  height: 128px;
 
-  border: 4px solid var(--panel-border);
-  background: var(--panel-bg);
+  background: var(--pet-card-bg);
+  border: 4px solid var(--pet-card-border);
+  box-shadow: 4px 4px 0 var(--pet-card-shadow);
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  image-rendering: pixelated;
 }
 
 .pet-grid {
