@@ -22,7 +22,7 @@ export default function PetSelection({
           {petDefinitions.map((pet) => (
             <PetCard
               key={pet.name}
-              name={pet.displayName}
+              petDefinition={pet}
               isSelected={selectedPet === pet.name}
               onSelect={() => onSelectPet(pet.name)}
             />
