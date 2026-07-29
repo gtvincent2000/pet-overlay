@@ -1,43 +1,34 @@
 import { openOverlayWindow, closeOverlayWindow, hideCurrentWindow } from "../tauri/windows";
 import PixelPanel from "../ui/PixelPanel";
-import PixelButton from "../ui/PixelButton";
+import MenuButton from "../ui/MenuButton";
 
 type HomeProps = {
   onOpenPetSelection: () => void;
   onOpenSettings: () => void;
 };
 
-export default function Home({ onOpenPetSelection, onOpenSettings }: HomeProps) {
+export default function Home({ onOpenPetSelection }: HomeProps) {
   return (
     <div className="home-page">
-      {/* Header Content */}
-      <header className="home-header">
-        <h1>Overlay Companion</h1>
-      </header>
 
-      {/* Sidebar Settings Selection */}
+      {/* Button Selection */}
       <div className="home-layout">
         {/* Primary Content */}
         <main className="home-content">
-          <PixelPanel>
             <div className="home-menu">
-              <PixelButton onClick={openOverlayWindow}>
+              <MenuButton onClick={openOverlayWindow}>
                 Open Overlay
-              </PixelButton>
-              <PixelButton onClick={onOpenPetSelection}>
-                Change Pet
-              </PixelButton>
-              <PixelButton onClick={onOpenSettings}>
-                Settings
-              </PixelButton>
-              <PixelButton onClick={hideCurrentWindow}>
-                Close Menu
-              </PixelButton>
-              <PixelButton onClick={closeOverlayWindow}>
+              </MenuButton>
+              <MenuButton onClick={closeOverlayWindow}>
                 Close Overlay
-              </PixelButton>
+              </MenuButton>
+              <MenuButton onClick={onOpenPetSelection}>
+                Change Pet
+              </MenuButton>
+              <MenuButton onClick={hideCurrentWindow}>
+                Close Menu
+              </MenuButton>
             </div>
-          </PixelPanel>
         </main>
       </div>
     </div>

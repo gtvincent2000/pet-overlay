@@ -35,7 +35,20 @@ canvas {
 /* Home Screen styles */
 .home-page {
   min-height: 100vh;
+  width: 100vw;
+
+  background-image: url("/assets/backgrounds/Background_v1.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   padding: clamp(16px, 4vw, 48px);
+  box-sizing: border-box;
 }
 
 .home-header {
@@ -58,12 +71,20 @@ canvas {
 
 .home-content {
   flex: 1;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .home-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+
+  margin-top: 190px;
 }
 
 /* Screen Styling */
@@ -129,6 +150,44 @@ canvas {
 .pixel-button:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--button-shadow-hover);
+}
+
+.menu-button {
+  width: 240px;
+  height: 56px;
+
+  border: none;
+  padding: 0;
+  background: transparent;
+
+  background-image: url("/assets/ui/menu-button-states.png");
+  background-repeat: no-repeat;
+  background-size: 720px 56px;
+  background-position: 0 0;
+
+  image-rendering: pixelated;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font: inherit;
+  color: var(--text-primary);
+}
+
+.menu-button:hover {
+  background-position: -240px 0;
+}
+
+.menu-button:active {
+  background-position: -480px 0;
+}
+
+.menu-button-label {
+  pointer-events: none;
+  transform: translateY(-1px);
 }
 
 /* Pet Card Styles */
