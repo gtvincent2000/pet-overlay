@@ -313,3 +313,34 @@ canvas {
   gap: 70px;
   justify-content: center;
 }
+
+/* Overlay Styles */
+
+.overlay-root {
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay-clock {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+
+  padding: 3px 8px;
+
+  background: rgba(248, 232, 184, 0.9);
+  border: 2px solid var(--panel-border);
+  box-shadow: 2px 2px 0 var(--panel-shadow);
+
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1;
+
+  image-rendering: pixelated;
+  pointer-events: none;
+}

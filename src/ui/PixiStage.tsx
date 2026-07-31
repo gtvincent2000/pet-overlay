@@ -24,6 +24,7 @@ type AtlasLike = {
 
 type PixiStageProps = {
   selectedPet: PetName;
+  bottomOffset?: number;
 };
 
 type AnimationClips = Partial<Record<PetAnimationName, Texture[]>>;
@@ -159,7 +160,10 @@ async function loadPetResourcesWithFallback(
   }
 }
 
-export default function PixiStage({ selectedPet }: PixiStageProps) {
+export default function PixiStage({
+  selectedPet,
+  bottomOffset = 10,
+}: PixiStageProps) {
 
   const hostRef = useRef<HTMLDivElement | null>(null);
 
@@ -296,7 +300,7 @@ export default function PixiStage({ selectedPet }: PixiStageProps) {
       pet.tint = petDefinition.placeholderTint;
 
       pet.x = Math.floor(app.renderer.width / 2);
-      pet.y = Math.floor(app.renderer.height - 10);
+      pet.y = Math.floor(app.renderer.height - bottomOffset);
 
       const playClip = (
         textures: Texture[],
