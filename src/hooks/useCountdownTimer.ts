@@ -22,7 +22,19 @@ export function useCountdownTimer({
   const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(autoStart);
 
+  const [hasCompleted, setHasCompleted] = useState(false);
+  const [completionId, setCompletionId] = useState(0);
+
   const isComplete = remainingSeconds === 0;
+
+  function clearCompletion() {
+    setHasCompleted(false);
+  }
+
+  function markCompleted() {
+    setHasCompleted(true);
+    setCompletionId((currentCompletionId) => currentCompletionId + 1);
+  }
 
   useEffect(() => {
     if (!isRunning) {
@@ -33,6 +45,7 @@ export function useCountdownTimer({
       setRemainingSeconds((currentRemainingSeconds) => {
         if (currentRemainingSeconds <= 1) {
           setIsRunning(false);
+          markCompleted();
           return 0;
         }
 
@@ -46,6 +59,8 @@ export function useCountdownTimer({
   }, [isRunning]);
 
   function start() {
+    clearCompletion();
+
     if (remainingSeconds === 0) {
       setRemainingSeconds(durationSeconds);
     }
@@ -60,12 +75,14 @@ export function useCountdownTimer({
   function reset() {
     setIsRunning(false);
     setRemainingSeconds(durationSeconds);
+    clearCompletion();
   }
 
   function setDuration(newDurationSeconds: number) {
     setIsRunning(false);
     setDurationSeconds(newDurationSeconds);
     setRemainingSeconds(newDurationSeconds);
+    clearCompletion();
   }
 
   return {
@@ -73,9 +90,12 @@ export function useCountdownTimer({
     remainingSeconds,
     isRunning,
     isComplete,
+    hasCompleted,
+    completionId,
     start,
     pause,
     reset,
     setDuration,
+    clearCompletion,
   };
 }
