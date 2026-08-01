@@ -1,15 +1,9 @@
-import {
-  formatTimerText,
-  useCountdownTimer,
-} from "../hooks/useCountdownTimer";
+import { formatTimerText } from "../hooks/useCountdownTimer";
 
-const DEFAULT_TIMER_SECONDS = 25 * 60; // 25 minutes
+type OverlayTimerProps = {
+  remainingSeconds: number;
+};
 
-export default function OverlayTimer() {
-  const { remainingSeconds } = useCountdownTimer({
-    initialSeconds: DEFAULT_TIMER_SECONDS,
-    autoStart: true,
-  });
-
+export default function OverlayTimer({ remainingSeconds }: OverlayTimerProps) {
   return <>{formatTimerText(remainingSeconds)}</>;
 }

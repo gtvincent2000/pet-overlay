@@ -347,13 +347,13 @@ canvas {
 }
 
 .overlay-display-content {
-  margin-left: 72px;
-  width: 184px;
+  margin-left: 66px;
+  width: 198px;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 
   color: var(--text-primary);
   font-size: 18px;
@@ -364,17 +364,25 @@ canvas {
 }
 
 .overlay-display-time {
-  min-width: 72px;
+  min-width: 64px;
   text-align: center;
 }
 
-.overlay-display-mode-button {
+.overlay-timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.overlay-hud-button {
   opacity: 0;
-  width: 24px;
-  height: 24px;
+  pointer-events: none;
+
+  width: 22px;
+  height: 22px;
 
   border: 2px solid var(--panel-border);
-  background: rgba(248, 232, 184, 0.95);
+  background: var(--panel-bg);
   color: var(--text-primary);
   box-shadow: 2px 2px 0 var(--panel-shadow);
 
@@ -385,7 +393,7 @@ canvas {
   padding: 0;
   cursor: pointer;
   font: inherit;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1;
 
   image-rendering: pixelated;
@@ -393,15 +401,18 @@ canvas {
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
-.overlay-root:hover .overlay-display-mode-button {
+.overlay-root:hover .overlay-hud-button,
+.overlay-display-box:hover .overlay-hud-button,
+.overlay-hud-button:focus-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
-.overlay-display-mode-button:hover {
+.overlay-hud-button:hover {
   transform: translate(-1px, -1px);
 }
 
-.overlay-display-mode-button:active {
+.overlay-hud-button:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--panel-shadow);
 }

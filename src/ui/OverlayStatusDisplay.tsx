@@ -7,6 +7,7 @@ import {
 import OverlayClock from "./OverlayClock";
 import OverlayDisplayBox from "./OverlayDisplayBox";
 import OverlayTimer from "./OverlayTimer";
+import { useCountdownTimer } from "../hooks/useCountdownTimer";
 
 function getCurrentDate() {
   return new Date();
@@ -15,6 +16,11 @@ function getCurrentDate() {
 export default function OverlayStatusDisplay() {
   const [currentDate, setCurrentDate] = useState(getCurrentDate);
   const [displayMode, setDisplayMode] = useState(getStoredOverlayDisplayMode);
+  
+  const timer = useCountdownTimer({
+    initialSeconds: 25 * 60,
+    autoStart: false,
+  });
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -36,15 +42,22 @@ export default function OverlayStatusDisplay() {
 
   return (
     <OverlayDisplayBox
-      currentDate={currentDate}
-      displayMode={displayMode}
-      onToggleDisplayMode={toggleDisplayMode}
+        currentDate={currentDate}
+        displayMode={displayMode}
+        onToggleDisplayMode={toggleDisplayMode}
+        timerControls={{
+        isRunning: timer.isRunning,
+        isComplete: timer.isComplete,
+        onStart: timer.start,
+        onPause: timer.pause,
+        onReset: timer.reset,
+        }}
     >
-      {displayMode === "clock" ? (
+        {displayMode === "clock" ? (
         <OverlayClock currentDate={currentDate} />
-      ) : (
-        <OverlayTimer />
-      )}
+        ) : (
+        <OverlayTimer remainingSeconds={timer.remainingSeconds} />
+        )}
     </OverlayDisplayBox>
-  );
+    );
 }
