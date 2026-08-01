@@ -68,15 +68,17 @@ export default function Overlay() {
 
   return (
     <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        background: "transparent",
-        userSelect: "none",
-      }}
-      onPointerDownCapture={async (e) => {
-        if (e.button !== 0) return;
-        e.preventDefault();
+      className="overlay-root"
+      onPointerDownCapture={async (event) => {
+        if (event.button !== 0) return;
+
+        const target = event.target as HTMLElement;
+
+        if (target.closest("[data-overlay-interactive='true']")) {
+          return;
+        }
+
+        event.preventDefault();
         await win.setFocus();
         await win.startDragging();
       }}

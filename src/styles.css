@@ -343,16 +343,17 @@ canvas {
   display: flex;
   align-items: center;
 
-  pointer-events: none;
+  pointer-events: auto;
 }
 
-.overlay-display-text {
+.overlay-display-content {
   margin-left: 72px;
   width: 184px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
 
   color: var(--text-primary);
   font-size: 18px;
@@ -360,4 +361,47 @@ canvas {
   font-weight: bold;
 
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.overlay-display-time {
+  min-width: 72px;
+  text-align: center;
+}
+
+.overlay-display-mode-button {
+  opacity: 0;
+  width: 24px;
+  height: 24px;
+
+  border: 2px solid var(--panel-border);
+  background: rgba(248, 232, 184, 0.95);
+  color: var(--text-primary);
+  box-shadow: 2px 2px 0 var(--panel-shadow);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+
+  image-rendering: pixelated;
+
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.overlay-root:hover .overlay-display-mode-button {
+  opacity: 1;
+}
+
+.overlay-display-mode-button:hover {
+  transform: translate(-1px, -1px);
+}
+
+.overlay-display-mode-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--panel-shadow);
 }

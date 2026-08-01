@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { DEFAULT_OVERLAY_DISPLAY_MODE } from "../data/overlayDisplay";
+import { getNextOverlayDisplayMode } from "../data/overlayDisplay";
+import {
+  getStoredOverlayDisplayMode,
+  saveOverlayDisplayMode,
+} from "../data/overlayDisplayStorage";
 import OverlayClock from "./OverlayClock";
 import OverlayDisplayBox from "./OverlayDisplayBox";
 import OverlayTimer from "./OverlayTimer";
@@ -10,6 +14,7 @@ function getCurrentDate() {
 
 export default function OverlayStatusDisplay() {
   const [currentDate, setCurrentDate] = useState(getCurrentDate);
+  const [displayMode, setDisplayMode] = useState(getStoredOverlayDisplayMode);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -21,9 +26,21 @@ export default function OverlayStatusDisplay() {
     };
   }, []);
 
+  useEffect(() => {
+    saveOverlayDisplayMode(displayMode);
+  }, [displayMode]);
+
+  function toggleDisplayMode() {
+    setDisplayMode((currentMode) => getNextOverlayDisplayMode(currentMode));
+  }
+
   return (
-    <OverlayDisplayBox currentDate={currentDate}>
-      {DEFAULT_OVERLAY_DISPLAY_MODE === "clock" ? (
+    <OverlayDisplayBox
+      currentDate={currentDate}
+      displayMode={displayMode}
+      onToggleDisplayMode={toggleDisplayMode}
+    >
+      {displayMode === "clock" ? (
         <OverlayClock currentDate={currentDate} />
       ) : (
         <OverlayTimer />
