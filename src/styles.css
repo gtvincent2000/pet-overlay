@@ -364,9 +364,21 @@ canvas {
   transform: scale(1.06);
 }
 
+.pet-card-selected:hover {
+  transform: scale(1.07);
+}
+
+.pet-card-selected-label {
+  margin-top: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .pet-card-selected .pet-card-box {
   background: var(--pet-card-selected-bg);
   border-color: var(--pet-card-selected-border);
+  box-shadow: 4px 4px 0 var(--pet-card-shadow);
 }
 
 .pet-card-name {
@@ -390,6 +402,27 @@ canvas {
   justify-content: center;
 
   image-rendering: pixelated;
+}
+
+.pet-card-checkmark {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  z-index: 2;
+
+  color: #4f9f45;
+
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+
+  pointer-events: none;
+
+  text-shadow:
+    1px 1px 0 #2f5f2a,
+    -1px 1px 0 #2f5f2a,
+    1px -1px 0 #2f5f2a,
+    -1px -1px 0 #2f5f2a;
 }
 
 .pet-preview {

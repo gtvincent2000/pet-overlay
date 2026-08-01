@@ -27,9 +27,15 @@ export default function PetCard({
       <p className="pet-card-name">{petDefinition.displayName}</p>
 
       <div className="pet-card-box">
+        {isSelected && (
+          <span className="pet-card-checkmark" aria-label="Selected pet">
+            ✓
+          </span>
+        )}
+
         <PetPreview
           petDefinition={petDefinition}
-          isActive={isPreviewActive}
+          isActive={isHovered || isSelected}
         />
       </div>
     </button>
