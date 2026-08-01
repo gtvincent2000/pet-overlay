@@ -16,6 +16,7 @@ export default function PetSelection({
 
   return (
     <div className="screen-page pet-selection-page">
+      <div className="home-cloud-layer" aria-hidden="true" />
       <BackButton onClick={onBack}>←Back</BackButton>
       <h1 className="pet-selection-content">Pets</h1>
         <div className="pet-grid">

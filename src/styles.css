@@ -64,6 +64,9 @@ canvas {
   min-height: 100vh;
   width: 100vw;
 
+  position: relative;
+  overflow: hidden;
+
   background-image: url("/assets/backgrounds/Background_v1.png");
   background-size: 100% 100%;
   background-position: center;
@@ -112,6 +115,55 @@ canvas {
   gap: 16px;
 
   margin-top: 190px;
+}
+
+.home-content,
+.home-header,
+.home-menu {
+  position: relative;
+  z-index: 2;
+}
+
+.home-title-layer {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/backgrounds/home-title.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.home-cloud-layer {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/backgrounds/home-cloud-layer.png");
+  background-repeat: repeat-x;
+  background-size: 800px 600px;
+  background-position: 0 0;
+
+  image-rendering: pixelated;
+
+  pointer-events: none;
+  z-index: 1;
+
+  animation: home-cloud-drift 80s linear infinite;
+}
+
+@keyframes home-cloud-drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -800px 0;
+  }
 }
 
 /* Screen Styling */
@@ -246,14 +298,14 @@ canvas {
   min-height: 100vh;
   width: 100vw;
 
-  background-image: url("/assets/backgrounds/pet-selection-background.png");
+  position: relative;
+  overflow: hidden;
+
+  background-image: url("/assets/backgrounds/Background_v1.png");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
   image-rendering: pixelated;
-
-  font-size: 20px;
-  
 
   color: var(--pet-selection-text);
 
@@ -265,6 +317,13 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.pet-selection-content,
+.pet-grid,
+.back-button {
+  position: relative;
+  z-index: 2;
 }
 
 .pet-selection-content h1 {

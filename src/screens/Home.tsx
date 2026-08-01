@@ -9,6 +9,8 @@ type HomeProps = {
 export default function Home({ onOpenPetSelection }: HomeProps) {
   return (
     <div className="home-page">
+      <div className="home-cloud-layer" aria-hidden="true" />
+      <div className="home-title-layer" aria-hidden="true" />
 
       {/* Button Selection */}
       <div className="home-layout">
