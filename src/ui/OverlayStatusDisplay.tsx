@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DEFAULT_OVERLAY_DISPLAY_MODE } from "../data/OverlayDisplay";
+import { DEFAULT_OVERLAY_DISPLAY_MODE } from "../data/overlayDisplay";
 import OverlayClock from "./OverlayClock";
 import OverlayDisplayBox from "./OverlayDisplayBox";
 import OverlayTimer from "./OverlayTimer";
