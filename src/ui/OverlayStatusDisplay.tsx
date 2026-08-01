@@ -16,6 +16,10 @@ import {
 import OverlayClock from "./OverlayClock";
 import OverlayDisplayBox from "./OverlayDisplayBox";
 import OverlayTimer from "./OverlayTimer";
+import {
+  playTimerAlarmSound,
+  prepareTimerAlarmSound,
+} from "../audio/timerAlarm";
 
 function getCurrentDate() {
   return new Date();
@@ -46,6 +50,16 @@ export default function OverlayStatusDisplay() {
     saveOverlayDisplayMode(displayMode);
   }, [displayMode]);
 
+  useEffect(() => {
+    if (timer.completionId === 0) {
+        return;
+    }
+
+    playTimerAlarmSound().catch((error) => {
+        console.warn("Failed to play timer alarm sound:", error);
+    });
+  }, [timer.completionId]);
+
   function toggleDisplayMode() {
     setDisplayMode((currentMode) => getNextOverlayDisplayMode(currentMode));
   }
@@ -73,6 +87,16 @@ export default function OverlayStatusDisplay() {
     setIsEditingTimerDuration(false);
   }
 
+  async function startTimer() {
+    try {
+        await prepareTimerAlarmSound();
+    } catch (error) {
+        console.warn("Failed to prepare timer alarm sound:", error);
+    }
+
+    timer.start();
+  }
+
   return (
     <OverlayDisplayBox
       currentDate={currentDate}
@@ -82,7 +106,7 @@ export default function OverlayStatusDisplay() {
         isRunning: timer.isRunning,
         isComplete: timer.isComplete,
         isEditing: isEditingTimerDuration,
-        onStart: timer.start,
+        onStart: startTimer,
         onPause: timer.pause,
         onReset: timer.reset,
       }}
