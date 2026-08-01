@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PixiStage from "../ui/PixiStage";
 import { getCurrentWindow, LogicalPosition } from "@tauri-apps/api/window";
 import { getStoredSelectedPet } from "../data/petStorage";
@@ -6,12 +6,21 @@ import { listen } from "@tauri-apps/api/event";
 import type { PetName } from "../data/pets";
 import { SELECTED_PET_CHANGED_EVENT } from "../data/petEvents";
 import OverlayStatusDisplay from "../ui/OverlayStatusDisplay";
+import { getTimerCompletionMessage } from "../data/timerCompletionMessages";
+import PetSpeechBubble from "../ui/PetSpeechBubble";
+
 
 const KEY = "overlay-position";
 
 export default function Overlay() {
   const win = getCurrentWindow();
   const [selectedPet, setSelectedPet] = useState<PetName>(getStoredSelectedPet);
+  const [speechBubbleMessage, setSpeechBubbleMessage] = useState<string | null>(
+    null
+  );
+  const handleTimerComplete = useCallback(() => {
+    setSpeechBubbleMessage(getTimerCompletionMessage(selectedPet));
+  }, [selectedPet]);
 
   // Restore once when overlay mounts
   useEffect(() => {
@@ -66,6 +75,20 @@ export default function Overlay() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!speechBubbleMessage) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setSpeechBubbleMessage(null);
+    }, 9000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [speechBubbleMessage]);
+
   return (
     <div
       className="overlay-root"
@@ -83,8 +106,14 @@ export default function Overlay() {
         await win.startDragging();
       }}
     >
-      <PixiStage selectedPet={selectedPet} bottomOffset={62} />
-      <OverlayStatusDisplay />
+      <PixiStage selectedPet={selectedPet} bottomOffset={72} />
+
+      <PetSpeechBubble
+        message={speechBubbleMessage}
+        onDismiss={() => setSpeechBubbleMessage(null)}
+      />
+
+      <OverlayStatusDisplay onTimerComplete={handleTimerComplete} />
     </div>
   );
 }

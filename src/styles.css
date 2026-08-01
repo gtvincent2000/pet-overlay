@@ -476,3 +476,64 @@ canvas {
 .overlay-timer-input:focus {
   background: rgba(243, 214, 122, 0.35);
 }
+
+/* Pet Speech Bubble Styles */
+
+.pet-speech-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: 255px;
+  transform: translateX(-50%);
+
+  max-width: 260px;
+  min-width: 120px;
+
+  padding: 8px 10px;
+
+  background: #f8e8b8;
+  border: 3px solid var(--panel-border);
+  box-shadow: 3px 3px 0 var(--panel-shadow);
+
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.15;
+  text-align: center;
+
+  cursor: pointer;
+
+  image-rendering: pixelated;
+  z-index: 5;
+}
+
+.pet-speech-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+
+  width: 0;
+  height: 0;
+
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--panel-border);
+}
+
+.pet-speech-bubble::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+
+  width: 0;
+  height: 0;
+
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid #f8e8b8;
+
+  z-index: 1;
+}

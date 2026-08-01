@@ -25,7 +25,13 @@ function getCurrentDate() {
   return new Date();
 }
 
-export default function OverlayStatusDisplay() {
+type OverlayStatusDisplayProps = {
+  onTimerComplete: () => void;
+};
+
+export default function OverlayStatusDisplay({
+  onTimerComplete,
+}: OverlayStatusDisplayProps) {
   const [currentDate, setCurrentDate] = useState(getCurrentDate);
   const [displayMode, setDisplayMode] = useState(getStoredOverlayDisplayMode);
   const [isEditingTimerDuration, setIsEditingTimerDuration] = useState(false);
@@ -55,10 +61,12 @@ export default function OverlayStatusDisplay() {
         return;
     }
 
+    onTimerComplete();
+
     playTimerAlarmSound().catch((error) => {
         console.warn("Failed to play timer alarm sound:", error);
     });
-  }, [timer.completionId]);
+  }, [timer.completionId, onTimerComplete]);
 
   function toggleDisplayMode() {
     setDisplayMode((currentMode) => getNextOverlayDisplayMode(currentMode));
