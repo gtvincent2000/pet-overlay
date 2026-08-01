@@ -4,6 +4,7 @@ import type { OverlayDisplayMode } from "../data/overlayDisplay";
 type TimerControls = {
   isRunning: boolean;
   isComplete: boolean;
+  isEditing: boolean;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
@@ -41,7 +42,7 @@ export default function OverlayDisplayBox({
       <div className="overlay-display-content">
         <span className="overlay-display-time">{children}</span>
 
-        {displayMode === "timer" && (
+        {displayMode === "timer" && !timerControls.isEditing && (
           <div className="overlay-timer-controls">
             <button
               className="overlay-hud-button"
@@ -76,18 +77,20 @@ export default function OverlayDisplayBox({
           </div>
         )}
 
-        <button
-          className="overlay-hud-button overlay-display-mode-button"
-          type="button"
-          aria-label={toggleLabel}
-          data-overlay-interactive="true"
-          onClick={(event) => {
-            event.stopPropagation();
-            onToggleDisplayMode();
-          }}
-        >
-          {toggleText}
-        </button>
+        {!timerControls.isEditing && (
+            <button
+                className="overlay-hud-button overlay-display-mode-button"
+                type="button"
+                aria-label={toggleLabel}
+                data-overlay-interactive="true"
+                onClick={(event) => {
+                event.stopPropagation();
+                onToggleDisplayMode();
+                }}
+            >
+                {toggleText}
+            </button>
+        )}
       </div>
     </div>
   );

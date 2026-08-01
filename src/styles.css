@@ -435,3 +435,44 @@ canvas {
   background: #c89b43;
   transform: translateY(2px);
 }
+
+.overlay-timer-display {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  text-shadow: inherit;
+
+  cursor: text;
+}
+
+.overlay-timer-input {
+  width: 78px;
+  height: 20px;
+
+  border: none;
+  background: transparent;
+  color: inherit;
+
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+
+  font: inherit;
+  line-height: 1;
+  text-align: center;
+  text-shadow: inherit;
+
+  outline: 2px solid #6f4a1f;
+  outline-offset: 1px;
+
+  transform: translateY(1px);
+}
+
+.overlay-timer-input:focus {
+  background: rgba(243, 214, 122, 0.35);
+}

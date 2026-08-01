@@ -18,6 +18,7 @@ export function useCountdownTimer({
   initialSeconds,
   autoStart = false,
 }: UseCountdownTimerOptions) {
+  const [durationSeconds, setDurationSeconds] = useState(initialSeconds);
   const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(autoStart);
 
@@ -46,7 +47,7 @@ export function useCountdownTimer({
 
   function start() {
     if (remainingSeconds === 0) {
-      setRemainingSeconds(initialSeconds);
+      setRemainingSeconds(durationSeconds);
     }
 
     setIsRunning(true);
@@ -58,15 +59,23 @@ export function useCountdownTimer({
 
   function reset() {
     setIsRunning(false);
-    setRemainingSeconds(initialSeconds);
+    setRemainingSeconds(durationSeconds);
+  }
+
+  function setDuration(newDurationSeconds: number) {
+    setIsRunning(false);
+    setDurationSeconds(newDurationSeconds);
+    setRemainingSeconds(newDurationSeconds);
   }
 
   return {
+    durationSeconds,
     remainingSeconds,
     isRunning,
     isComplete,
     start,
     pause,
     reset,
+    setDuration,
   };
 }
