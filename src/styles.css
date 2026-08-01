@@ -33,7 +33,20 @@ html, body, #root {
   --pet-card-shadow: #a85c15;
 }
 
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("./assets/fonts/PixelifySans.ttf") format("truetype");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
 
+html,
+body,
+#root,
+button {
+  font-family: "Pixelify Sans", monospace;
+}
 
 canvas { 
   display: block;
@@ -347,13 +360,14 @@ canvas {
 }
 
 .overlay-display-content {
-  margin-left: 66px;
-  width: 198px;
+  margin-left: 40px;
+  width: 208px;
+  height: 100%;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 
   color: var(--text-primary);
   font-size: 18px;
@@ -361,11 +375,14 @@ canvas {
   font-weight: bold;
 
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+
+  transform: translateY(-6px);
 }
 
 .overlay-display-time {
-  min-width: 64px;
+  min-width: 72px;
   text-align: center;
+  transform: translateY(1px);
 }
 
 .overlay-timer-controls {
@@ -378,13 +395,13 @@ canvas {
   opacity: 0;
   pointer-events: none;
 
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
 
-  border: 2px solid var(--panel-border);
-  background: var(--panel-bg);
-  color: var(--text-primary);
-  box-shadow: 2px 2px 0 var(--panel-shadow);
+  border: 2px solid #6f4a1f;
+  background: #e4c36a;
+  color: #2b1d0e;
+  box-shadow: none;
 
   display: flex;
   align-items: center;
@@ -398,7 +415,8 @@ canvas {
 
   image-rendering: pixelated;
 
-  transition: opacity 120ms ease, transform 120ms ease;
+  transform: translateY(1px);
+  transition: opacity 120ms ease, transform 120ms ease, background 120ms ease;
 }
 
 .overlay-root:hover .overlay-hud-button,
@@ -409,10 +427,11 @@ canvas {
 }
 
 .overlay-hud-button:hover {
-  transform: translate(-1px, -1px);
+  background: #f0d982;
+  transform: translateY(0);
 }
 
 .overlay-hud-button:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--panel-shadow);
+  background: #c89b43;
+  transform: translateY(2px);
 }

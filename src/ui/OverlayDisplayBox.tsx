@@ -29,7 +29,7 @@ export default function OverlayDisplayBox({
   const toggleLabel =
     displayMode === "clock" ? "Switch to timer" : "Switch to clock";
 
-  const toggleText = displayMode === "clock" ? "⏱" : "🕒";
+  const toggleText = displayMode === "clock" ? "⏱" : "◷";
 
   return (
     <div
