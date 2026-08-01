@@ -17,7 +17,7 @@ export default function PetSelection({
   return (
     <div className="screen-page pet-selection-page">
       <BackButton onClick={onBack}>←Back</BackButton>
-      <h1>Pets</h1>
+      <h1 className="pet-selection-content">Pets</h1>
         <div className="pet-grid">
           {petDefinitions.map((pet) => (
             <PetCard
