@@ -5,7 +5,7 @@ import { getStoredSelectedPet } from "../data/petStorage";
 import { listen } from "@tauri-apps/api/event";
 import type { PetName } from "../data/pets";
 import { SELECTED_PET_CHANGED_EVENT } from "../data/petEvents";
-import OverlayClock from "../ui/OverlayClock";
+import OverlayStatusDisplay from "../ui/OverlayStatusDisplay";
 
 const KEY = "overlay-position";
 
@@ -98,7 +98,7 @@ export default function Overlay() {
       </div>
 
       <PixiStage selectedPet={selectedPet} bottomOffset={62} />
-      <OverlayClock />
+      <OverlayStatusDisplay />
     </div>
   );
 }
