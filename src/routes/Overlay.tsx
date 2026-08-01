@@ -8,6 +8,7 @@ import { SELECTED_PET_CHANGED_EVENT } from "../data/petEvents";
 import OverlayStatusDisplay from "../ui/OverlayStatusDisplay";
 import { getTimerCompletionMessage } from "../data/timerCompletionMessages";
 import PetSpeechBubble from "../ui/PetSpeechBubble";
+import { getPetDefinition } from "../data/pets";
 
 
 const KEY = "overlay-position";
@@ -21,6 +22,7 @@ export default function Overlay() {
   const handleTimerComplete = useCallback(() => {
     setSpeechBubbleMessage(getTimerCompletionMessage(selectedPet));
   }, [selectedPet]);
+  const selectedPetDefinition = getPetDefinition(selectedPet);
 
   // Restore once when overlay mounts
   useEffect(() => {
@@ -110,6 +112,7 @@ export default function Overlay() {
 
       <PetSpeechBubble
         message={speechBubbleMessage}
+        bottomOffset={selectedPetDefinition.speechBubbleBottom}
         onDismiss={() => setSpeechBubbleMessage(null)}
       />
 

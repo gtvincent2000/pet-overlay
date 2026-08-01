@@ -17,7 +17,7 @@ export async function openOverlayWindow() {
     url: "/#/overlay",
     title: "Overlay",
     width: 420,
-    height: 300,
+    height: 340,
 
     decorations: false,
     transparent: true,

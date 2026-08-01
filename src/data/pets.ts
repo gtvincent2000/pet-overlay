@@ -26,10 +26,10 @@ export type PetDefinition = {
   displayName: string;
   spriteSheetPath: string;
   placeholderTint: number;
-  selectionPreviewScale: number;
-
   renderScale: number;
-  
+  selectionPreviewScale: number;
+  speechBubbleBottom: number;
+
   previewAnimation: PetAnimationName;
   defaultOverlayAnimation: PetAnimationName;
   animations: PetAnimationDefinition[];
@@ -45,6 +45,7 @@ export const petDefinitions: PetDefinition[] = [
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     selectionPreviewScale: 2,
+    speechBubbleBottom: 245,
     animations: [
       {
         name: "idle",
@@ -85,6 +86,7 @@ export const petDefinitions: PetDefinition[] = [
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     selectionPreviewScale: 2,
+    speechBubbleBottom: 185,
     animations: [
       {
         name: "idle",
@@ -104,6 +106,7 @@ export const petDefinitions: PetDefinition[] = [
     previewAnimation: "idle",
     defaultOverlayAnimation: "idle",
     selectionPreviewScale: 2,
+    speechBubbleBottom: 190,
     animations: [
       {
         name: "idle",
