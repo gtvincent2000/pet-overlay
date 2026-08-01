@@ -81,22 +81,6 @@ export default function Overlay() {
         await win.startDragging();
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: 8,
-          left: 8,
-          color: "white",
-          background: "rgba(0, 0, 0, 0.5)",
-          padding: "4px 8px",
-          borderRadius: 4,
-          fontSize: 12,
-          pointerEvents: "none",
-        }}
-      >
-        Selected Pet: {selectedPet}
-      </div>
-
       <PixiStage selectedPet={selectedPet} bottomOffset={62} />
       <OverlayStatusDisplay />
     </div>
