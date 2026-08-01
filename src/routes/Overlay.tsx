@@ -97,7 +97,7 @@ export default function Overlay() {
         Selected Pet: {selectedPet}
       </div>
 
-      <PixiStage selectedPet={selectedPet} bottomOffset={44} />
+      <PixiStage selectedPet={selectedPet} bottomOffset={62} />
       <OverlayClock />
     </div>
   );

@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
+import { getDayPhaseForDate } from "../data/dayPhases";
 
-function getCurrentTimeText() {
+function getCurrentDate() {
+  return new Date();
+}
+
+function getCurrentTimeText(date: Date) {
   return new Intl.DateTimeFormat(undefined, {
     hour: "numeric",
     minute: "2-digit",
-    second: "2-digit",
-  }).format(new Date());
+  }).format(date);
 }
 
 export default function OverlayClock() {
-  const [timeText, setTimeText] = useState(getCurrentTimeText);
+  const [currentDate, setCurrentDate] = useState(getCurrentDate);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
-      setTimeText(getCurrentTimeText());
+      setCurrentDate(getCurrentDate());
     }, 1000);
 
     return () => {
@@ -21,5 +25,17 @@ export default function OverlayClock() {
     };
   }, []);
 
-  return <div className="overlay-clock">{timeText}</div>;
+  const dayPhase = getDayPhaseForDate(currentDate);
+  const timeText = getCurrentTimeText(currentDate);
+
+  return (
+    <div
+      className="overlay-display-box"
+      style={{
+        backgroundImage: `url("${dayPhase.containerImagePath}")`,
+      }}
+    >
+      <div className="overlay-display-text">{timeText}</div>
+    </div>
+  );
 }

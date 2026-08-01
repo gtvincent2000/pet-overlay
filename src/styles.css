@@ -325,22 +325,39 @@ canvas {
   overflow: hidden;
 }
 
-.overlay-clock {
+.overlay-display-box {
   position: absolute;
   left: 50%;
-  bottom: 8px;
+  bottom: 6px;
   transform: translateX(-50%);
 
-  padding: 3px 8px;
+  width: 280px;
+  height: 60px;
 
-  background: rgba(248, 232, 184, 0.9);
-  border: 2px solid var(--panel-border);
-  box-shadow: 2px 2px 0 var(--panel-shadow);
-
-  color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
 
   image-rendering: pixelated;
+
+  display: flex;
+  align-items: center;
+
   pointer-events: none;
+}
+
+.overlay-display-text {
+  margin-left: 72px;
+  width: 184px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--text-primary);
+  font-size: 18px;
+  line-height: 1;
+  font-weight: bold;
+
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
 }
