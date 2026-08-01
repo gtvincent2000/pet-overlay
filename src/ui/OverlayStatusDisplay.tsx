@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef,  useState } from "react";
 import { getNextOverlayDisplayMode } from "../data/overlayDisplay";
 import {
   getStoredOverlayDisplayMode,
@@ -36,6 +36,7 @@ export default function OverlayStatusDisplay({
   const [displayMode, setDisplayMode] = useState(getStoredOverlayDisplayMode);
   const [isEditingTimerDuration, setIsEditingTimerDuration] = useState(false);
   const [timerEditValue, setTimerEditValue] = useState("");
+  const lastHandledCompletionIdRef = useRef(0);
 
   const timer = useCountdownTimer({
     initialSeconds: getStoredTimerDurationSeconds(),
@@ -60,6 +61,12 @@ export default function OverlayStatusDisplay({
     if (timer.completionId === 0) {
         return;
     }
+
+    if (lastHandledCompletionIdRef.current === timer.completionId) {
+        return;
+    }
+
+    lastHandledCompletionIdRef.current = timer.completionId;
 
     onTimerComplete();
 
