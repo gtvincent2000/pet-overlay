@@ -14,16 +14,13 @@ const petTimerMessages: Record<PetName, string[]> = {
     "Woof! Time's up!",
     "Hey! Your timer's done!",
     "Timer's done! Good job!",
+    "Treat time?",
   ],
   Cat: [
-    "Meow. Timer's done.",
+    "Meowdy. Timer's done.",
     "Your timer is finished. Obviously.",
     "Time's up. I noticed.",
-  ],
-  Fox: [
-    "Yip! Time's up!",
-    "Timer complete!",
-    "Hey! Your timer's done!",
+    "Timer's done. You're welcome.",
   ],
 };
 

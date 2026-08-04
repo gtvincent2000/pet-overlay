@@ -1,4 +1,4 @@
-export type PetName = "Dog" | "Cat" | "Fox";
+export type PetName = "Dog" | "Cat";
 
 export const DEFAULT_PET_NAME: PetName = "Dog";
 
@@ -94,47 +94,6 @@ export const petDefinitions: PetDefinition[] = [
         endFrame: 28,
         frameRate: 0.14,
         loop: true,
-      },
-    ],
-  },
-  {
-    name: "Fox",
-    displayName: "Fox",
-    spriteSheetPath: "/assets/pets/Milbie_v2.json",
-    placeholderTint: 0xff8c42,
-    renderScale: 4,
-    previewAnimation: "idle",
-    defaultOverlayAnimation: "idle",
-    selectionPreviewScale: 2,
-    speechBubbleBottom: 190,
-    animations: [
-      {
-        name: "idle",
-        startFrame: 13,
-        endFrame: 42,
-        frameRate: 0.12,
-        loop: true,
-      },
-      {
-        name: "tongueExtend",
-        startFrame: 43,
-        endFrame: 48,
-        frameRate: 0.14,
-        loop: false,
-      },
-      {
-        name: "tongueOutIdle",
-        startFrame: 49,
-        endFrame: 54,
-        frameRate: 0.14,
-        loop: true,
-      },
-      {
-        name: "tongueRetract",
-        startFrame: 7,
-        endFrame: 12,
-        frameRate: 0.14,
-        loop: false,
       },
     ],
   },

@@ -347,7 +347,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 
   transition: transform 120ms ease;
 }
@@ -371,6 +371,9 @@ canvas {
 
 .pet-card-name {
   margin: 0;
+  color: var(--pet-selection-text);
+  font-size: 20px;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -406,9 +409,10 @@ canvas {
 
 .pet-grid {
   display: grid;
-  grid-template-columns: repeat(3, 180px);
-  gap: 70px;
+  grid-template-columns: repeat(2, 180px);
+  gap: 36px;
   justify-content: center;
+  align-items: start;
 }
 
 /* Overlay Styles */
