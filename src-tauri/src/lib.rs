@@ -6,11 +6,6 @@ use tauri::{
     WebviewWindowBuilder,
 };
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -51,7 +46,7 @@ pub fn run() {
                                     "overlay",
                                     WebviewUrl::App("index.html#/overlay".into()),
                                 )
-                                .title("Overlay")
+                                .title("Desktop Pet Overlay")
                                 .inner_size(420.0, 220.0)
                                 .decorations(false)
                                 .transparent(true)
@@ -81,7 +76,6 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
