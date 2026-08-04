@@ -174,7 +174,9 @@ export default function PetPreview({
       sprite.tint = petDefinition.placeholderTint;
 
       sprite.x = Math.floor(app.renderer.width / 2);
-      sprite.y = Math.floor(app.renderer.height - 6);
+      sprite.y =
+        Math.floor(app.renderer.height - 6) +
+        petDefinition.selectionPreviewYOffset;
 
       app.stage.addChild(sprite);
       spriteRef.current = sprite;
