@@ -7,11 +7,10 @@ import { SELECTED_PET_CHANGED_EVENT } from "./data/petEvents";
 import Overlay from "./routes/Overlay";
 import Home from "./screens/Home";
 import PetSelection from "./screens/PetSelection";
-import Settings from "./screens/Settings";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] =
-    useState<"home" | "petSelection" | "settings">("home");
+    useState<"home" | "petSelection">("home");
 
   const [selectedPet, setSelectedPet] = useState<PetName>(getStoredSelectedPet);
 
@@ -34,14 +33,9 @@ export default function App() {
       );
     }
 
-    if (currentScreen === "settings") {
-      return <Settings onBack={() => setCurrentScreen("home")} />;
-    }
-
     return (
       <Home
         onOpenPetSelection={() => setCurrentScreen("petSelection")}
-        onOpenSettings={() => setCurrentScreen("settings")}
       />
     );
   };

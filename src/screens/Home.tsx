@@ -3,7 +3,6 @@ import MenuButton from "../ui/MenuButton";
 
 type HomeProps = {
   onOpenPetSelection: () => void;
-  onOpenSettings: () => void;
 };
 
 export default function Home({ onOpenPetSelection }: HomeProps) {
