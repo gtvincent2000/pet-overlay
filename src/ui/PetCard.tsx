@@ -15,8 +15,6 @@ export default function PetCard({
 }: PetCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const isPreviewActive = isHovered || isSelected;
-
   return (
     <button
       className={`pet-card ${isSelected ? "pet-card-selected" : ""}`}
